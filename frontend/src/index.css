@@ -1,5 +1,5 @@
 /* ============================================================================
-   SuperManus V3 - Manus.im Inspired Design
+   SuperManus V3 - Manus.im Inspired Design (100% Match)
    ============================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
@@ -29,6 +29,12 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-mono: 'SF Mono', Monaco, 'Courier New', monospace;
+  
+  /* Animation Variables */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.35s ease;
+  --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 body {
@@ -39,14 +45,164 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* App Layout */
+/* ============================================================================
+   Animations & Keyframes
+   ============================================================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes pulseScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes expandHeight {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+@keyframes collapseHeight {
+  from {
+    max-height: 500px;
+    opacity: 1;
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ============================================================================
+   App Layout
+   ============================================================================ */
+
 .app {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  animation: fadeIn var(--transition-normal);
 }
 
-/* Sidebar */
+/* ============================================================================
+   Sidebar
+   ============================================================================ */
+
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-primary);
@@ -54,6 +210,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  animation: fadeInLeft var(--transition-slow);
 }
 
 .sidebar-header {
@@ -67,12 +224,22 @@ body {
   gap: 10px;
   font-weight: 600;
   font-size: 18px;
+  transition: transform var(--transition-fast);
+}
+
+.logo:hover {
+  transform: scale(1.02);
 }
 
 .logo svg {
   width: 28px;
   height: 28px;
   color: var(--accent-color);
+  transition: transform var(--transition-normal);
+}
+
+.logo:hover svg {
+  transform: rotate(10deg);
 }
 
 .sidebar-nav {
@@ -91,11 +258,33 @@ body {
   cursor: pointer;
   font-size: 14px;
   color: var(--text-primary);
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.1), transparent);
+  transition: left var(--transition-normal);
+}
+
+.nav-item:hover::before {
+  left: 100%;
 }
 
 .nav-item:hover {
   background: var(--bg-tertiary);
+  transform: translateX(4px);
+}
+
+.nav-item:active {
+  transform: translateX(2px) scale(0.98);
 }
 
 .nav-item kbd {
@@ -105,6 +294,11 @@ body {
   border-radius: 4px;
   font-size: 11px;
   color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.nav-item:hover kbd {
+  background: var(--bg-secondary);
 }
 
 .sidebar-section {
@@ -144,11 +338,13 @@ body {
   font-size: 13px;
   color: var(--text-secondary);
   text-align: left;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
+  animation: fadeInLeft var(--transition-normal);
 }
 
 .task-item:hover {
   background: var(--bg-tertiary);
+  transform: translateX(4px);
 }
 
 .task-item.active {
@@ -178,6 +374,13 @@ body {
   border-radius: 8px;
   cursor: pointer;
   text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.share-button:hover {
+  border-color: var(--accent-color);
+  background: var(--accent-light);
+  transform: scale(1.02);
 }
 
 .share-text {
@@ -195,7 +398,10 @@ body {
   color: var(--text-muted);
 }
 
-/* Main Content */
+/* ============================================================================
+   Main Content
+   ============================================================================ */
+
 .main-content {
   flex: 1;
   display: flex;
@@ -204,7 +410,10 @@ body {
   position: relative;
 }
 
-/* TopBar */
+/* ============================================================================
+   TopBar
+   ============================================================================ */
+
 .topbar {
   height: var(--topbar-height);
   display: flex;
@@ -213,6 +422,7 @@ body {
   padding: 0 20px;
   border-bottom: 1px solid var(--border-color);
   background: var(--bg-primary);
+  animation: fadeInDown var(--transition-normal);
 }
 
 .topbar-left {
@@ -230,6 +440,12 @@ body {
   border-radius: 6px;
   font-size: 13px;
   font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.version-badge:hover {
+  background: var(--accent-light);
+  color: var(--accent-color);
 }
 
 .topbar-right {
@@ -245,11 +461,17 @@ body {
   border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .topbar-btn:hover {
   background: var(--bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.topbar-btn:active {
+  transform: translateY(0);
 }
 
 .connection-status {
@@ -261,11 +483,13 @@ body {
   font-size: 12px;
   background: var(--bg-tertiary);
   color: var(--text-muted);
+  transition: all var(--transition-normal);
 }
 
 .connection-status.connected {
   background: #dcfce7;
   color: var(--success-color);
+  animation: pulseScale 2s ease-in-out infinite;
 }
 
 .status-dot {
@@ -273,6 +497,11 @@ body {
   height: 8px;
   border-radius: 50%;
   background: currentColor;
+  transition: all var(--transition-fast);
+}
+
+.connection-status.connected .status-dot {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .user-btn {
@@ -284,16 +513,28 @@ body {
   color: white;
   font-weight: 600;
   cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-/* Content Area */
+.user-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* ============================================================================
+   Content Area
+   ============================================================================ */
+
 .content-area {
   flex: 1;
   display: flex;
   overflow: hidden;
 }
 
-/* Chat Area */
+/* ============================================================================
+   Chat Area
+   ============================================================================ */
+
 .chat-area {
   flex: 1;
   display: flex;
@@ -301,7 +542,10 @@ body {
   overflow: hidden;
 }
 
-/* Welcome Screen */
+/* ============================================================================
+   Welcome Screen
+   ============================================================================ */
+
 .welcome-screen {
   flex: 1;
   display: flex;
@@ -310,6 +554,7 @@ body {
   justify-content: center;
   padding: 40px;
   gap: 24px;
+  animation: fadeIn var(--transition-slow);
 }
 
 .welcome-screen h1 {
@@ -317,15 +562,24 @@ body {
   font-size: 42px;
   font-weight: 400;
   color: var(--text-primary);
+  animation: fadeInUp var(--transition-slow);
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
 }
 
-/* Quick Actions */
+/* ============================================================================
+   Quick Actions
+   ============================================================================ */
+
 .quick-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 16px;
+  animation: fadeInUp var(--transition-slow);
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
 }
 
 .quick-action {
@@ -338,24 +592,39 @@ body {
   border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .quick-action:hover {
   background: var(--bg-tertiary);
   border-color: var(--text-muted);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.quick-action:active {
+  transform: translateY(0);
 }
 
 .connect-tools {
   margin-top: 24px;
   font-size: 14px;
   color: var(--text-muted);
+  animation: fadeIn var(--transition-slow);
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
 }
 
-/* Chat Input */
+/* ============================================================================
+   Chat Input
+   ============================================================================ */
+
 .chat-input-form {
   width: 100%;
   max-width: 720px;
+  animation: fadeInUp var(--transition-normal);
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
 }
 
 .chat-input-wrapper {
@@ -366,12 +635,13 @@ body {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 24px;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .chat-input-wrapper:focus-within {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 3px var(--accent-light);
+  transform: scale(1.01);
 }
 
 .input-tools-left,
@@ -392,11 +662,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .tool-btn:hover {
   background: var(--bg-tertiary);
+  transform: scale(1.1);
+}
+
+.tool-btn:active {
+  transform: scale(0.95);
 }
 
 .chat-input-wrapper textarea {
@@ -422,13 +697,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
   color: var(--text-muted);
 }
 
 .send-btn.active {
   background: var(--accent-color);
   color: white;
+  animation: pulseScale 0.3s ease;
+}
+
+.send-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.send-btn:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
 .send-btn:disabled {
@@ -436,7 +720,10 @@ body {
   cursor: not-allowed;
 }
 
-/* Conversation */
+/* ============================================================================
+   Conversation
+   ============================================================================ */
+
 .conversation-container {
   flex: 1;
   overflow-y: auto;
@@ -452,12 +739,16 @@ body {
   background: var(--bg-primary);
 }
 
-/* User Message */
+/* ============================================================================
+   User Message
+   ============================================================================ */
+
 .user-message-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
+  animation: fadeInUp var(--transition-normal);
 }
 
 .user-message-box {
@@ -466,6 +757,11 @@ body {
   background: var(--bg-secondary);
   border-radius: 16px;
   position: relative;
+  transition: all var(--transition-fast);
+}
+
+.user-message-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .user-message-box p {
@@ -484,11 +780,16 @@ body {
   font-size: 12px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .user-message-box:hover .design-btn {
   opacity: 1;
+}
+
+.design-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-color);
 }
 
 .message-time {
@@ -496,11 +797,15 @@ body {
   color: var(--text-muted);
 }
 
-/* Agent Response */
+/* ============================================================================
+   Agent Response
+   ============================================================================ */
+
 .agent-response {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  animation: fadeInUp var(--transition-normal);
 }
 
 .agent-header {
@@ -517,6 +822,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.agent-avatar:hover {
+  transform: rotate(10deg) scale(1.1);
 }
 
 .agent-avatar svg {
@@ -537,10 +847,12 @@ body {
   border-radius: 4px;
   font-size: 11px;
   font-weight: 600;
+  animation: scaleIn var(--transition-fast);
 }
 
 .agent-message {
   padding-left: 42px;
+  animation: fadeIn var(--transition-normal);
 }
 
 .agent-message p {
@@ -549,7 +861,10 @@ body {
   color: var(--text-primary);
 }
 
-/* Steps */
+/* ============================================================================
+   Steps
+   ============================================================================ */
+
 .steps-container {
   padding-left: 42px;
   display: flex;
@@ -561,6 +876,13 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
+  animation: fadeInUp var(--transition-normal);
+  transition: all var(--transition-fast);
+}
+
+.step-item:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
 }
 
 .step-header {
@@ -569,7 +891,7 @@ body {
   gap: 12px;
   padding: 12px 16px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .step-header:hover {
@@ -583,15 +905,18 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 14px;
+  transition: all var(--transition-fast);
 }
 
 .step-icon.completed {
   color: var(--accent-color);
   font-weight: bold;
+  animation: scaleIn var(--transition-bounce);
 }
 
 .step-icon.running {
   color: var(--blue-color);
+  animation: pulse 1s ease-in-out infinite;
 }
 
 .step-icon.pending {
@@ -607,6 +932,11 @@ body {
 .step-toggle {
   font-size: 10px;
   color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.step-item.expanded .step-toggle {
+  transform: rotate(180deg);
 }
 
 .step-content {
@@ -614,6 +944,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  animation: fadeIn var(--transition-normal);
+  overflow: hidden;
 }
 
 .step-description {
@@ -626,6 +958,7 @@ body {
   background: #1e1e1e;
   border-radius: 8px;
   overflow: hidden;
+  animation: scaleIn var(--transition-normal);
 }
 
 .command-header {
@@ -651,6 +984,7 @@ body {
   background: var(--bg-secondary);
   border-radius: 8px;
   padding: 12px;
+  animation: fadeIn var(--transition-normal);
 }
 
 .step-result pre {
@@ -664,14 +998,23 @@ body {
 .step-image {
   border-radius: 8px;
   overflow: hidden;
+  animation: scaleIn var(--transition-normal);
 }
 
 .step-image img {
   max-width: 100%;
   display: block;
+  transition: transform var(--transition-normal);
 }
 
-/* Thinking Indicator */
+.step-image:hover img {
+  transform: scale(1.02);
+}
+
+/* ============================================================================
+   Thinking Indicator
+   ============================================================================ */
+
 .thinking-indicator {
   display: flex;
   align-items: center;
@@ -679,30 +1022,31 @@ body {
   padding-left: 42px;
   color: var(--blue-color);
   font-size: 14px;
+  animation: fadeIn var(--transition-normal);
 }
 
 .thinking-dot {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
 .completion-dot {
   padding-left: 42px;
   font-size: 8px;
   color: var(--text-primary);
+  animation: scaleIn var(--transition-bounce);
 }
 
-/* Files Panel */
+/* ============================================================================
+   Files Panel
+   ============================================================================ */
+
 .files-panel {
   background: var(--bg-primary);
   border-left: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   position: relative;
+  animation: slideInFromRight var(--transition-slow);
 }
 
 .resize-handle {
@@ -722,11 +1066,17 @@ body {
   bottom: 0;
   width: 2px;
   background: transparent;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .resize-handle:hover .resize-line {
   background: var(--accent-color);
+}
+
+.resize-handle:active .resize-line {
+  background: var(--accent-color);
+  width: 4px;
+  left: 2px;
 }
 
 .panel-header {
@@ -750,7 +1100,20 @@ body {
   font-size: 13px;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.panel-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-color);
+  transition: all var(--transition-fast);
+  transform: translateX(-50%);
 }
 
 .panel-tab:hover {
@@ -763,6 +1126,10 @@ body {
   font-weight: 500;
 }
 
+.panel-tab.active::after {
+  width: 60%;
+}
+
 .file-count {
   margin-left: 4px;
   padding: 2px 6px;
@@ -770,6 +1137,7 @@ body {
   color: var(--accent-color);
   border-radius: 10px;
   font-size: 11px;
+  animation: scaleIn var(--transition-bounce);
 }
 
 .panel-actions {
@@ -787,10 +1155,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--transition-fast);
 }
 
 .panel-action:hover {
   background: var(--bg-tertiary);
+  transform: scale(1.1);
+}
+
+.panel-action:active {
+  transform: scale(0.95);
 }
 
 .panel-content {
@@ -798,11 +1172,15 @@ body {
   overflow: hidden;
 }
 
-/* Preview */
+/* ============================================================================
+   Preview
+   ============================================================================ */
+
 .preview-container {
   height: 100%;
   display: flex;
   flex-direction: column;
+  animation: fadeIn var(--transition-normal);
 }
 
 .preview-filename {
@@ -817,6 +1195,7 @@ body {
   flex: 1;
   border: none;
   background: white;
+  transition: opacity var(--transition-normal);
 }
 
 .preview-empty,
@@ -828,18 +1207,24 @@ body {
   justify-content: center;
   gap: 12px;
   color: var(--text-muted);
+  animation: fadeIn var(--transition-slow);
 }
 
 .preview-empty span,
 .code-empty span {
   font-size: 32px;
+  animation: bounce 2s ease-in-out infinite;
 }
 
-/* Code */
+/* ============================================================================
+   Code
+   ============================================================================ */
+
 .code-container {
   height: 100%;
   display: flex;
   flex-direction: column;
+  animation: fadeIn var(--transition-normal);
 }
 
 .code-filename {
@@ -862,7 +1247,10 @@ body {
   color: #e5e7eb;
 }
 
-/* Files List */
+/* ============================================================================
+   Files List
+   ============================================================================ */
+
 .files-list {
   height: 100%;
   overflow-y: auto;
@@ -876,11 +1264,13 @@ body {
   padding: 10px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
+  animation: fadeInLeft var(--transition-normal);
 }
 
 .file-item:hover {
   background: var(--bg-tertiary);
+  transform: translateX(4px);
 }
 
 .file-item.selected {
@@ -889,6 +1279,11 @@ body {
 
 .file-icon {
   font-size: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.file-item:hover .file-icon {
+  transform: scale(1.2);
 }
 
 .file-info {
@@ -918,7 +1313,7 @@ body {
   border-radius: 6px;
   cursor: pointer;
   opacity: 0;
-  transition: all 0.15s;
+  transition: all var(--transition-fast);
 }
 
 .file-item:hover .file-download {
@@ -927,9 +1322,13 @@ body {
 
 .file-download:hover {
   background: var(--bg-secondary);
+  transform: scale(1.1);
 }
 
-/* Manus Computer Mini */
+/* ============================================================================
+   Manus Computer Mini
+   ============================================================================ */
+
 .manus-computer-mini {
   position: fixed;
   bottom: 80px;
@@ -945,6 +1344,13 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   z-index: 100;
+  animation: slideInFromBottom var(--transition-slow);
+  transition: all var(--transition-fast);
+}
+
+.manus-computer-mini:hover {
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .computer-thumbnail {
@@ -956,6 +1362,11 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 20px;
+  transition: transform var(--transition-fast);
+}
+
+.manus-computer-mini:hover .computer-thumbnail {
+  transform: scale(1.1);
 }
 
 .computer-info {
@@ -997,13 +1408,18 @@ body {
   cursor: pointer;
   font-size: 8px;
   color: var(--text-muted);
+  transition: all var(--transition-fast);
 }
 
 .nav-arrows button:hover {
   color: var(--text-primary);
+  transform: scale(1.2);
 }
 
-/* Manus Computer Expanded */
+/* ============================================================================
+   Manus Computer Expanded
+   ============================================================================ */
+
 .manus-computer-expanded {
   position: fixed;
   top: 50%;
@@ -1018,6 +1434,18 @@ body {
   display: flex;
   flex-direction: column;
   z-index: 200;
+  animation: scaleIn var(--transition-normal);
+}
+
+.computer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  animation: fadeIn var(--transition-fast);
 }
 
 .computer-header {
@@ -1054,10 +1482,16 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  transition: all var(--transition-fast);
 }
 
 .computer-controls button:hover {
   background: var(--border-color);
+  transform: scale(1.1);
+}
+
+.computer-controls button:active {
+  transform: scale(0.95);
 }
 
 .computer-controls button:disabled {
@@ -1078,6 +1512,7 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  animation: fadeIn var(--transition-normal);
 }
 
 .viewport-placeholder {
@@ -1086,10 +1521,12 @@ body {
   align-items: center;
   gap: 12px;
   color: var(--text-muted);
+  animation: fadeIn var(--transition-slow);
 }
 
 .viewport-placeholder span:first-child {
   font-size: 48px;
+  animation: bounce 2s ease-in-out infinite;
 }
 
 .computer-footer {
@@ -1110,13 +1547,43 @@ body {
   border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .footer-btn:hover {
   background: var(--bg-tertiary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Responsive */
+.footer-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================================================
+   Loading States
+   ============================================================================ */
+
+.loading-skeleton {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
 @media (max-width: 768px) {
   .sidebar {
     display: none;
@@ -1136,7 +1603,10 @@ body {
   }
 }
 
-/* Toast Notifications */
+/* ============================================================================
+   Toast Notifications
+   ============================================================================ */
+
 .toast-container {
   position: fixed;
   top: 20px;
@@ -1153,7 +1623,12 @@ body {
   color: white;
   border-radius: 8px;
   font-size: 14px;
-  animation: slideIn 0.3s ease;
+  animation: slideInFromRight var(--transition-normal);
+  transition: all var(--transition-fast);
+}
+
+.toast:hover {
+  transform: translateX(-4px);
 }
 
 .toast.error {
@@ -1164,13 +1639,720 @@ body {
   background: var(--success-color);
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+.toast.warning {
+  background: var(--warning-color);
+}
+
+/* ============================================================================
+   Scrollbar Styling
+   ============================================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ============================================================================
+   Focus States
+   ============================================================================ */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   Selection
+   ============================================================================ */
+
+::selection {
+  background: var(--accent-light);
+  color: var(--accent-color);
+}
+
+
+/* ============================================================================
+   New Task Button
+   ============================================================================ */
+
+.new-task-btn {
+  background: var(--accent-light) !important;
+  color: var(--accent-color) !important;
+  font-weight: 500;
+}
+
+.new-task-btn:hover {
+  background: var(--accent-color) !important;
+  color: white !important;
+}
+
+/* ============================================================================
+   Task Status Indicator
+   ============================================================================ */
+
+.task-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: auto;
+}
+
+.task-status.running {
+  background: var(--accent-color);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================================================
+   TopBar Center
+   ============================================================================ */
+
+.topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.topbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbar-btn.primary {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.topbar-btn.primary:hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
+}
+
+/* ============================================================================
+   Chat Input Container
+   ============================================================================ */
+
+.chat-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  transition: all var(--transition-fast);
+}
+
+.chat-input-container:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.chat-input-container textarea {
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  line-height: 1.5;
+  min-height: 24px;
+  max-height: 200px;
+}
+
+.input-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.input-action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.input-action-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.send-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.send-button.active {
+  background: var(--accent-color);
+  color: white;
+}
+
+.send-button:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ============================================================================
+   Quick Action Cards
+   ============================================================================ */
+
+.quick-action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 24px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-width: 140px;
+}
+
+.quick-action-card:hover {
+  border-color: var(--accent-color);
+  background: var(--accent-light);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+}
+
+.action-icon {
+  font-size: 24px;
+  color: var(--accent-color);
+}
+
+.action-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.action-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ============================================================================
+   Message Styles
+   ============================================================================ */
+
+.message {
+  animation: fadeInUp var(--transition-normal);
+}
+
+.user-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.user-message .message-content {
+  max-width: 80%;
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+}
+
+.user-message .message-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.message-time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.agent-message {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================================================
+   Thinking Indicator - Updated
+   ============================================================================ */
+
+.thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.thinking-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.thinking-dots span {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.thinking-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ============================================================================
+   Agent Steps - Updated
+   ============================================================================ */
+
+.agent-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step-item {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.step-item:hover {
+  border-color: var(--accent-color);
+}
+
+.step-item.completed .step-icon {
+  color: var(--success-color);
+}
+
+.step-item.running .step-icon {
+  color: var(--accent-color);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.step-header:hover {
+  background: var(--bg-secondary);
+}
+
+.step-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.step-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.step-number {
+  width: 20px;
+  height: 20px;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.step-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.step-toggle {
+  color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.step-item.expanded .step-toggle {
+  transform: rotate(180deg);
+}
+
+.step-details {
+  padding: 0 16px 16px 52px;
+  animation: fadeIn var(--transition-fast);
+}
+
+.step-details pre {
+  margin: 0;
+  padding: 12px;
+  background: #1e1e1e;
+  border-radius: 8px;
+  color: #e5e7eb;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow-x: auto;
+}
+
+.agent-response-content {
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+}
+
+.agent-response-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================================================
+   Manus Computer Mini Bar - Updated
+   ============================================================================ */
+
+.manus-computer-mini {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  animation: slideInFromBottom var(--transition-slow);
+  transition: all var(--transition-fast);
+}
+
+.manus-computer-mini:hover {
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.manus-computer-mini.running {
+  border-color: var(--accent-color);
+}
+
+.computer-mini-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.computer-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.computer-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--accent-color);
+}
+
+.status-pulse {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.computer-mini-center {
+  flex: 1;
+  min-width: 0;
+}
+
+.current-step-preview {
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 200px;
+}
+
+.computer-mini-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-navigation button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.step-navigation button:hover:not(:disabled) {
+  background: var(--accent-light);
+  color: var(--accent-color);
+}
+
+.step-navigation button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.step-counter {
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 40px;
+  text-align: center;
+}
+
+.expand-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.expand-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-color);
+  transform: scale(1.1);
+}
+
+/* ============================================================================
+   Manus Computer Expanded - Updated
+   ============================================================================ */
+
+.manus-computer-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.computer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  animation: fadeIn var(--transition-fast);
+}
+
+.computer-modal {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  height: 80%;
+  background: var(--bg-primary);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  animation: scaleIn var(--transition-normal);
+  overflow: hidden;
+}
+
+.computer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.computer-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.close-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.close-btn:hover {
+  background: var(--error-color);
+  color: white;
+}
+
+.computer-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.computer-screenshot {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  animation: fadeIn var(--transition-normal);
+}
+
+.computer-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+.computer-placeholder svg {
+  width: 64px;
+  height: 64px;
+  opacity: 0.5;
+}
+
+.computer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step-action {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.step-detail {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============================================================================
+   Files Panel Resizing
+   ============================================================================ */
+
+.files-panel.resizing {
+  user-select: none;
+}
+
+.files-panel.resizing * {
+  pointer-events: none;
 }
