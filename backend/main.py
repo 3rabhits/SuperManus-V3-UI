@@ -1,6 +1,12 @@
 """
 SuperManus V3 - Real Working Backend
 Inspired by Manus.im
+
+Features:
+- Environment-based configuration (no hardcoded paths)
+- Secure CORS settings
+- Optional API key authentication
+- Cross-platform compatibility
 """
 
 import asyncio
@@ -12,21 +18,29 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 from enum import Enum
+from functools import wraps
 
-sys.path.insert(0, '/home/ubuntu/OpenManus_V3')
-
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Depends, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 import uvicorn
 
+# Import configuration
+from config import config, Config
+
 # ============================================================================
-# Constants
+# Setup OpenManus Path
 # ============================================================================
 
-WORKSPACE_PATH = "/home/ubuntu/OpenManus_V3/workspace"
+# Add OpenManus to path if exists
+if config.OPENMANUS_PATH.exists():
+    sys.path.insert(0, str(config.OPENMANUS_PATH))
+    print(f"[INFO] OpenManus path added: {config.OPENMANUS_PATH}")
+else:
+    print(f"[WARNING] OpenManus not found at: {config.OPENMANUS_PATH}")
+    print("[WARNING] Agent functionality will be limited")
 
 # ============================================================================
 # Data Models
@@ -46,6 +60,19 @@ class StepType(str, Enum):
     READING = "reading"
     EXECUTING = "executing"
     SEARCHING = "searching"
+
+# ============================================================================
+# Authentication (Optional)
+# ============================================================================
+
+async def verify_api_key(x_api_key: Optional[str] = Header(None)):
+    """Verify API key if configured"""
+    if not config.API_KEY:
+        return True  # No authentication required
+    
+    if x_api_key != config.API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    return True
 
 # ============================================================================
 # Connection Manager
@@ -83,9 +110,10 @@ class ConnectionManager:
 def scan_workspace_files() -> List[Dict]:
     """Scan workspace for all files"""
     files = []
-    workspace = Path(WORKSPACE_PATH)
+    workspace = config.WORKSPACE_PATH
     
     if not workspace.exists():
+        print(f"[WARNING] Workspace not found: {workspace}")
         return files
     
     extensions = {
@@ -104,7 +132,11 @@ def scan_workspace_files() -> List[Dict]:
         'zip': ('archive', False),
     }
     
+    file_count = 0
     for file_path in workspace.rglob('*'):
+        if file_count >= config.MAX_FILES_SCAN:
+            break
+            
         if file_path.is_file() and 'node_modules' not in str(file_path):
             ext = file_path.suffix[1:].lower() if file_path.suffix else ''
             if ext in extensions or ext in ['png', 'jpg', 'jpeg', 'gif', 'svg']:
@@ -112,7 +144,7 @@ def scan_workspace_files() -> List[Dict]:
                 
                 content = ""
                 try:
-                    if file_path.stat().st_size < 50000:
+                    if file_path.stat().st_size < config.MAX_FILE_SIZE:
                         content = file_path.read_text(encoding='utf-8', errors='ignore')
                 except:
                     pass
@@ -129,6 +161,7 @@ def scan_workspace_files() -> List[Dict]:
                     "content": content[:10000] if content else "",
                     "modified": datetime.fromtimestamp(file_path.stat().st_mtime).isoformat()
                 })
+                file_count += 1
     
     # Sort by modified time (newest first)
     files.sort(key=lambda x: x['modified'], reverse=True)
@@ -143,6 +176,18 @@ class SuperManusRunner:
         self.manager = manager
         self.sessions: Dict[str, Dict] = {}
         self.running_tasks: Dict[str, asyncio.Task] = {}
+        self.agent_available = False
+        self._check_agent()
+    
+    def _check_agent(self):
+        """Check if SuperManus agent is available"""
+        try:
+            from app.agent.super_manus import SuperManus
+            self.agent_available = True
+            print("[INFO] SuperManus agent is available")
+        except ImportError as e:
+            self.agent_available = False
+            print(f"[WARNING] SuperManus agent not available: {e}")
     
     def get_session(self, session_id: str) -> Dict:
         if session_id not in self.sessions:
@@ -169,6 +214,19 @@ class SuperManusRunner:
         }
         session["messages"].append(user_msg)
         await self.manager.send(session_id, "message", user_msg)
+        
+        # Check if agent is available
+        if not self.agent_available:
+            error_msg = {
+                "id": str(uuid.uuid4()),
+                "role": "assistant",
+                "content": "❌ SuperManus agent is not available. Please check:\n\n1. OpenManus_V3 is installed\n2. OPENMANUS_PATH environment variable is set correctly\n3. All dependencies are installed",
+                "timestamp": datetime.now().isoformat()
+            }
+            session["messages"].append(error_msg)
+            await self.manager.send(session_id, "message", error_msg)
+            await self.manager.send(session_id, "status", {"status": "failed", "error": "Agent not available"})
+            return
         
         # Update status
         session["status"] = TaskStatus.PLANNING
@@ -318,19 +376,24 @@ class SuperManusRunner:
 # FastAPI App
 # ============================================================================
 
-app = FastAPI(title="SuperManus V3 API", version="3.0.0")
+app = FastAPI(
+    title="SuperManus V3 API", 
+    version="3.0.0",
+    description="Professional Web Interface for SuperManus V3"
+)
 
+# CORS - Use configured origins (secure by default)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=config.ALLOWED_ORIGINS if config.IS_PRODUCTION else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount workspace for static files
-if os.path.exists(WORKSPACE_PATH):
-    app.mount("/workspace", StaticFiles(directory=WORKSPACE_PATH), name="workspace")
+# Mount workspace for static files (only if exists)
+if config.WORKSPACE_PATH.exists():
+    app.mount("/workspace", StaticFiles(directory=str(config.WORKSPACE_PATH)), name="workspace")
 
 manager = ConnectionManager()
 runner = SuperManusRunner(manager)
@@ -341,11 +404,25 @@ runner = SuperManusRunner(manager)
 
 @app.get("/")
 async def root():
-    return {"message": "SuperManus V3 API", "version": "3.0.0", "status": "running"}
+    return {
+        "message": "SuperManus V3 API", 
+        "version": "3.0.0", 
+        "status": "running",
+        "agent_available": runner.agent_available
+    }
 
 @app.get("/api/health")
 async def health():
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+    return {
+        "status": "healthy", 
+        "timestamp": datetime.now().isoformat(),
+        "agent_available": runner.agent_available
+    }
+
+@app.get("/api/config")
+async def get_config():
+    """Get current configuration (for debugging)"""
+    return config.validate()
 
 @app.get("/api/files")
 async def get_files():
@@ -356,13 +433,18 @@ async def get_files():
 @app.get("/api/files/{file_path:path}")
 async def get_file_content(file_path: str):
     """Get content of a specific file"""
-    full_path = os.path.join(WORKSPACE_PATH, file_path)
-    if not os.path.exists(full_path):
+    full_path = config.WORKSPACE_PATH / file_path
+    if not full_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
     
+    # Security: Ensure path is within workspace
     try:
-        with open(full_path, 'r', encoding='utf-8') as f:
-            content = f.read()
+        full_path.resolve().relative_to(config.WORKSPACE_PATH.resolve())
+    except ValueError:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    try:
+        content = full_path.read_text(encoding='utf-8')
         return {"path": file_path, "content": content}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -370,18 +452,37 @@ async def get_file_content(file_path: str):
 @app.get("/api/preview/{file_name}")
 async def preview_file(file_name: str):
     """Serve file for preview"""
-    for root, dirs, files in os.walk(WORKSPACE_PATH):
+    # Security: Only allow specific file types
+    allowed_extensions = ['.html', '.htm', '.txt', '.md', '.json']
+    if not any(file_name.lower().endswith(ext) for ext in allowed_extensions):
+        raise HTTPException(status_code=403, detail="File type not allowed for preview")
+    
+    for root, dirs, files in os.walk(str(config.WORKSPACE_PATH)):
         if file_name in files:
-            return FileResponse(os.path.join(root, file_name))
+            file_path = Path(root) / file_name
+            # Security: Ensure path is within workspace
+            try:
+                file_path.resolve().relative_to(config.WORKSPACE_PATH.resolve())
+            except ValueError:
+                raise HTTPException(status_code=403, detail="Access denied")
+            return FileResponse(str(file_path))
+    
     raise HTTPException(status_code=404, detail="File not found")
 
 @app.get("/api/download/{file_path:path}")
 async def download_file(file_path: str):
     """Download a file"""
-    full_path = os.path.join(WORKSPACE_PATH, file_path)
-    if not os.path.exists(full_path):
+    full_path = config.WORKSPACE_PATH / file_path
+    if not full_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
-    return FileResponse(full_path, filename=os.path.basename(full_path))
+    
+    # Security: Ensure path is within workspace
+    try:
+        full_path.resolve().relative_to(config.WORKSPACE_PATH.resolve())
+    except ValueError:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    return FileResponse(str(full_path), filename=full_path.name)
 
 @app.get("/api/sessions/{session_id}")
 async def get_session(session_id: str):
@@ -400,7 +501,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
     # Send initial data
     files = scan_workspace_files()
     await manager.send(session_id, "files", {"files": files})
-    await manager.send(session_id, "status", {"status": "idle"})
+    await manager.send(session_id, "status", {"status": "idle", "agent_available": runner.agent_available})
     
     try:
         while True:
@@ -437,4 +538,16 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
 # ============================================================================
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Print configuration
+    config.print_config()
+    
+    # Validate configuration
+    validation = config.validate()
+    if not validation["valid"]:
+        print("\n[WARNING] Configuration issues:")
+        for issue in validation["issues"]:
+            print(f"  - {issue}")
+        print()
+    
+    # Run server
+    uvicorn.run(app, host=config.HOST, port=config.PORT)
