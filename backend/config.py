@@ -79,12 +79,14 @@ def get_allowed_origins() -> List[str]:
     if env_origins:
         return [origin.strip() for origin in env_origins.split(",")]
     
-    # Default: localhost only
+    # Default: localhost and manus.computer
     return [
         "http://localhost:3000",
         "http://localhost:3003",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3003",
+        "https://3003-i51decah5uga692w0g4xv-6c75ad8c.sg1.manus.computer",
+        "https://8000-i51decah5uga692w0g4xv-6c75ad8c.sg1.manus.computer",
     ]
 
 def get_api_key() -> str:
