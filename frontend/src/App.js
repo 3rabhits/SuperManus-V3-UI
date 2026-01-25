@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import './index.css';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 // Icons - Manus.im Style SVG Icons
 const Icons = {
@@ -214,6 +218,12 @@ const Icons = {
     </svg>
   ),
   Thinking: () => <span className="thinking-dot">●</span>,
+  Copy: () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.2"/>
+      <path d="M10 4V3C10 2.44772 9.55228 2 9 2H3C2.44772 2 2 2.44772 2 3V9C2 9.55228 2.44772 10 3 10H4" stroke="currentColor" strokeWidth="1.2"/>
+    </svg>
+  ),
 };
 
 // Sort options configuration
@@ -574,6 +584,113 @@ function StepItem({ step, index, isExpanded, onToggle, isLast }) {
   );
 }
 
+// Markdown Code Block Component with Syntax Highlighting
+const MarkdownCodeBlock = ({ node, inline, className, children, ...props }) => {
+  const match = /language-(\w+)/.exec(className || '');
+  const language = match ? match[1] : '';
+  const codeString = String(children).replace(/\n$/, '');
+  
+  if (!inline && language) {
+    return (
+      <div className="markdown-code-block">
+        <div className="code-block-header">
+          <span className="code-language">{language}</span>
+          <button 
+            className="copy-code-btn"
+            onClick={() => navigator.clipboard.writeText(codeString)}
+          >
+            <Icons.Copy /> Copy
+          </button>
+        </div>
+        <SyntaxHighlighter
+          style={oneDark}
+          language={language}
+          PreTag="div"
+          customStyle={{
+            margin: 0,
+            borderRadius: '0 0 8px 8px',
+            fontSize: '13px',
+            padding: '16px',
+          }}
+          {...props}
+        >
+          {codeString}
+        </SyntaxHighlighter>
+      </div>
+    );
+  }
+  
+  if (!inline) {
+    return (
+      <div className="markdown-code-block">
+        <SyntaxHighlighter
+          style={oneDark}
+          language="text"
+          PreTag="div"
+          customStyle={{
+            margin: 0,
+            borderRadius: '8px',
+            fontSize: '13px',
+            padding: '16px',
+          }}
+          {...props}
+        >
+          {codeString}
+        </SyntaxHighlighter>
+      </div>
+    );
+  }
+  
+  return (
+    <code className="inline-code" {...props}>
+      {children}
+    </code>
+  );
+};
+
+// Markdown Renderer Component
+function MarkdownContent({ content }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        code: MarkdownCodeBlock,
+        h1: ({ children }) => <h1 className="md-h1">{children}</h1>,
+        h2: ({ children }) => <h2 className="md-h2">{children}</h2>,
+        h3: ({ children }) => <h3 className="md-h3">{children}</h3>,
+        h4: ({ children }) => <h4 className="md-h4">{children}</h4>,
+        p: ({ children }) => <p className="md-paragraph">{children}</p>,
+        ul: ({ children }) => <ul className="md-list">{children}</ul>,
+        ol: ({ children }) => <ol className="md-list md-list-ordered">{children}</ol>,
+        li: ({ children }) => <li className="md-list-item">{children}</li>,
+        a: ({ href, children }) => (
+          <a href={href} className="md-link" target="_blank" rel="noopener noreferrer">
+            {children}
+          </a>
+        ),
+        blockquote: ({ children }) => <blockquote className="md-blockquote">{children}</blockquote>,
+        table: ({ children }) => (
+          <div className="md-table-wrapper">
+            <table className="md-table">{children}</table>
+          </div>
+        ),
+        th: ({ children }) => <th className="md-th">{children}</th>,
+        td: ({ children }) => <td className="md-td">{children}</td>,
+        hr: () => <hr className="md-hr" />,
+        strong: ({ children }) => <strong className="md-strong">{children}</strong>,
+        em: ({ children }) => <em className="md-em">{children}</em>,
+        img: ({ src, alt }) => (
+          <div className="md-image-wrapper">
+            <img src={src} alt={alt} className="md-image" />
+          </div>
+        ),
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
+}
+
 // Enhanced Agent Response Component
 function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails, expandedSteps, onStepToggle }) {
   const completedSteps = steps?.filter(s => s.status === 'completed').length || 0;
@@ -611,8 +728,8 @@ function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails
       )}
       
       {response && status !== 'thinking' && (
-        <div className="agent-response-content">
-          <div className="response-text">{response}</div>
+        <div className="agent-response-content markdown-body">
+          <MarkdownContent content={response} />
         </div>
       )}
     </div>
