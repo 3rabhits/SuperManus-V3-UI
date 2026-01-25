@@ -3,20 +3,19 @@ import './index.css';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 // Icons - Manus.im Style SVG Icons
 const Icons = {
   Logo: () => (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="8" fill="#7c3aed" fillOpacity="0.1"/>
-      <path d="M14 7L20 10.5V17.5L14 21L8 17.5V10.5L14 7Z" stroke="#7c3aed" strokeWidth="1.5" strokeLinejoin="round"/>
-      <path d="M14 14L20 10.5M14 14V21M14 14L8 10.5" stroke="#7c3aed" strokeWidth="1.5" strokeLinejoin="round"/>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+      <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
   NewTask: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" strokeWidth="1.5"/>
+      <rect x="3" y="3" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/>
       <path d="M9 6V12M6 9H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
@@ -31,57 +30,6 @@ const Icons = {
       <path d="M3 4H15M3 9H15M3 14H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
-  Folder: () => (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M2 5C2 4.44772 2.44772 4 3 4H7L9 6H15C15.5523 6 16 6.44772 16 7V13C16 13.5523 15.5523 14 15 14H3C2.44772 14 2 13.5523 2 13V5Z" stroke="currentColor" strokeWidth="1.5"/>
-    </svg>
-  ),
-  File: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M4 2H9L12 5V14H4V2Z" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M9 2V5H12" stroke="currentColor" strokeWidth="1.2"/>
-    </svg>
-  ),
-  Plus: () => (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 4V14M4 9H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
-  Send: () => (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 14V4M9 4L5 8M9 4L13 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
-  Check: () => (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M3 7L6 10L11 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
-  ChevronDown: () => (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
-  ChevronUp: () => (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M3 7.5L6 4.5L9 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
-  Expand: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M10 2H14V6M6 14H2V10M14 2L9 7M2 14L7 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
-  Close: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-    </svg>
-  ),
-  Download: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M8 2V10M8 10L5 7M8 10L11 7M3 14H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
   Share: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
       <circle cx="14" cy="4" r="2" stroke="currentColor" strokeWidth="1.5"/>
@@ -90,15 +38,63 @@ const Icons = {
       <path d="M6 8L12 5M6 10L12 13" stroke="currentColor" strokeWidth="1.5"/>
     </svg>
   ),
-  Filter: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M2 4H14M4 8H12M6 12H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  Settings: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="2" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M9 3V5M9 13V15M15 9H13M5 9H3M13.2 4.8L11.8 6.2M6.2 11.8L4.8 13.2M13.2 13.2L11.8 11.8M6.2 6.2L4.8 4.8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
-  Save: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M3 2H11L14 5V13C14 13.5523 13.5523 14 13 14H3C2.44772 14 2 13.5523 2 13V3C2 2.44772 2.44772 2 3 2Z" stroke="currentColor" strokeWidth="1.5"/>
-      <path d="M5 2V5H10V2M8 8V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  Send: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M3 9L15 3L9 15L8 10L3 9Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Check: () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M3 7L6 10L11 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M3 5L7 9L11 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  ChevronUp: () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M3 9L7 5L11 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  File: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M4 2H11L14 5V16H4V2Z" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M11 2V5H14" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  ),
+  Download: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M9 3V12M9 12L5 8M9 12L13 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3 15H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  Expand: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M3 7V3H7M11 3H15V7M15 11V15H11M7 15H3V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Close: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M4 4L14 14M14 4L4 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  Folder: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M2 5V14H16V7H9L7 5H2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Clock: () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M7 4V7L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
   Code: () => (
@@ -164,7 +160,6 @@ const Icons = {
       <path d="M9 2L10.5 6.5L15 8L10.5 9.5L9 14L7.5 9.5L3 8L7.5 6.5L9 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
     </svg>
   ),
-  // New Icons for enhanced features
   SortAsc: () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <path d="M4 6L8 2L12 6M4 10H12M4 14H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -173,12 +168,6 @@ const Icons = {
   SortDesc: () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <path d="M4 10L8 14L12 10M4 6H12M4 2H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  ),
-  Clock: () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5"/>
-      <path d="M8 4V8L10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
   FileType: () => (
@@ -195,35 +184,66 @@ const Icons = {
     </svg>
   ),
   Brain: () => (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 2C6.5 2 5 3.5 5 5.5C5 6.5 5.5 7.5 6 8C4.5 8.5 3 10 3 12C3 14 4.5 16 7 16H11C13.5 16 15 14 15 12C15 10 13.5 8.5 12 8C12.5 7.5 13 6.5 13 5.5C13 3.5 11.5 2 9 2Z" stroke="currentColor" strokeWidth="1.5"/>
-      <path d="M9 8V12M7 10H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 3C7.5 3 6 4.5 6 6.5C6 7.5 6.5 8.5 7 9C5.5 9.5 4 11 4 13C4 15 5.5 17 8 17H12C14.5 17 16 15 16 13C16 11 14.5 9.5 13 9C13.5 8.5 14 7.5 14 6.5C14 4.5 12.5 3 10 3Z" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M10 9V13M8 11H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
   Analyze: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.5"/>
-      <path d="M9 5V9L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <circle cx="8" cy="8" r="5" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M12 12L15 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M6 8H10M8 6V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
   Execute: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M6 4L14 9L6 14V4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      <path d="M6 4L14 9L6 14V4Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
     </svg>
   ),
   Review: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
       <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.5"/>
-      <path d="M6 9L8 11L12 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M6 9L8 11L12 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
-  Thinking: () => <span className="thinking-dot">●</span>,
   Copy: () => (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
       <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.2"/>
       <path d="M10 4V3C10 2.44772 9.55228 2 9 2H3C2.44772 2 2 2.44772 2 3V9C2 9.55228 2.44772 10 3 10H4" stroke="currentColor" strokeWidth="1.2"/>
     </svg>
   ),
+  Success: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M6 10L9 13L14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Error: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M7 7L13 13M13 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  Warning: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 3L18 17H2L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      <path d="M10 8V11M10 14V14.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  Info: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M10 9V14M10 6V6.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  Rocket: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M10 8L4 14M6 12L2 16M12 6C14 4 15 2 15 2C15 2 13 3 11 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="12" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  ),
+  Thinking: () => <span className="thinking-dot">●</span>,
 };
 
 // Sort options configuration
@@ -236,194 +256,74 @@ const SORT_OPTIONS = [
 
 // File type priority for sorting
 const FILE_TYPE_PRIORITY = {
-  'html': 1,
-  'css': 2,
-  'js': 3,
-  'jsx': 4,
-  'ts': 5,
-  'tsx': 6,
-  'json': 7,
-  'md': 8,
-  'py': 9,
-  'txt': 10,
-  'zip': 11,
-  'png': 12,
-  'jpg': 13,
-  'jpeg': 14,
-  'gif': 15,
-  'svg': 16,
-  'pdf': 17,
+  'html': 1, 'css': 2, 'js': 3, 'jsx': 4, 'ts': 5, 'tsx': 6,
+  'json': 7, 'md': 8, 'py': 9, 'txt': 10, 'zip': 11,
+  'png': 12, 'jpg': 13, 'jpeg': 14, 'gif': 15, 'svg': 16, 'pdf': 17,
 };
 
-// Sidebar Component
-function Sidebar({ tasks, currentTask, onNewTask, onSelectTask }) {
-  return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <div className="logo">
-          <Icons.Logo />
-          <span>supermanus</span>
-        </div>
-      </div>
-      
-      <nav className="sidebar-nav">
-        <button className="nav-item new-task-btn" onClick={onNewTask}>
-          <Icons.NewTask />
-          <span>New task</span>
-        </button>
-        <button className="nav-item">
-          <Icons.Search />
-          <span>Search</span>
-          <kbd>Ctrl+K</kbd>
-        </button>
-        <button className="nav-item">
-          <Icons.Library />
-          <span>Library</span>
-        </button>
-      </nav>
+// File type groups for display
+const FILE_TYPE_GROUPS = {
+  'Web Pages': ['html', 'htm'],
+  'Stylesheets': ['css', 'scss', 'sass', 'less'],
+  'JavaScript': ['js', 'jsx', 'ts', 'tsx'],
+  'Data Files': ['json', 'xml', 'yaml', 'yml'],
+  'Documents': ['md', 'txt', 'pdf', 'doc', 'docx'],
+  'Python': ['py', 'pyw', 'ipynb'],
+  'Images': ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'],
+  'Archives': ['zip', 'tar', 'gz', 'rar'],
+};
 
-      <div className="sidebar-section">
-        <div className="section-title">Projects</div>
-      </div>
+// Get file extension
+const getFileExtension = (filename) => {
+  if (!filename || typeof filename !== 'string') return '';
+  return filename.split('.').pop().toLowerCase();
+};
 
-      <div className="sidebar-section tasks-section">
-        <div className="section-title">All tasks</div>
-        <div className="tasks-list">
-          {tasks.map((task, index) => (
-            <button 
-              key={index} 
-              className={`task-item ${currentTask === index ? 'active' : ''}`}
-              onClick={() => onSelectTask(index)}
-            >
-              <Icons.File />
-              <span className="task-title">{task.title || task.message?.substring(0, 30) + '...'}</span>
-              {task.status === 'running' && <span className="task-status running"></span>}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="sidebar-footer">
-        <button className="share-button">
-          <Icons.Share />
-          <div className="share-text">
-            <span>Share SuperManus with a friend</span>
-            <small>Get 500 credits each</small>
-          </div>
-        </button>
-      </div>
-    </aside>
-  );
-}
-
-// TopBar Component
-function TopBar({ connected }) {
-  return (
-    <header className="topbar">
-      <div className="topbar-left">
-        <span className={`connection-status ${connected ? 'connected' : 'disconnected'}`}>
-          <span className="status-dot"></span>
-          {connected ? 'Connected' : 'Disconnected'}
-        </span>
-      </div>
-      <div className="topbar-center">
-        <span className="model-name">SuperManus V3</span>
-      </div>
-      <div className="topbar-right">
-        <button className="topbar-btn">
-          <Icons.Filter />
-        </button>
-        <button className="topbar-btn">
-          <Icons.Save />
-        </button>
-        <button className="topbar-btn primary">
-          <Icons.Share />
-          <span>Share</span>
-        </button>
-      </div>
-    </header>
-  );
-}
-
-// Chat Input Component
-function ChatInput({ onSend, disabled }) {
-  const [message, setMessage] = useState('');
-  const textareaRef = useRef(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (message.trim() && !disabled) {
-      onSend(message);
-      setMessage('');
-    }
+// Get file icon based on extension
+const getFileIcon = (filename) => {
+  const ext = getFileExtension(filename);
+  const iconMap = {
+    'html': '🌐', 'htm': '🌐', 'css': '🎨', 'scss': '🎨',
+    'js': '📜', 'jsx': '⚛️', 'ts': '📘', 'tsx': '⚛️',
+    'json': '📋', 'md': '📝', 'txt': '📄',
+    'py': '🐍', 'ipynb': '📓',
+    'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️', 'gif': '🎞️', 'svg': '🎨',
+    'zip': '📦', 'pdf': '📕',
   };
+  return iconMap[ext] || '📄';
+};
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
+// Get file type group
+const getFileTypeGroup = (filename) => {
+  const ext = getFileExtension(filename);
+  for (const [group, extensions] of Object.entries(FILE_TYPE_GROUPS)) {
+    if (extensions.includes(ext)) return group;
+  }
+  return 'Other Files';
+};
 
-  return (
-    <form className="chat-input-form" onSubmit={handleSubmit}>
-      <div className="input-container">
-        <textarea
-          ref={textareaRef}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="What can I do for you?"
-          disabled={disabled}
-          rows={1}
-        />
-        <div className="input-actions">
-          <button type="button" className="input-action" title="Add emoji">
-            <Icons.Emoji />
-          </button>
-          <button type="button" className="input-action" title="Voice input">
-            <Icons.Mic />
-          </button>
-          <button 
-            type="submit" 
-            className={`send-button ${message.trim() ? 'active' : ''}`}
-            disabled={!message.trim() || disabled}
-          >
-            <Icons.Send />
-          </button>
-        </div>
-      </div>
-      <div className="input-hint">Press Enter to send, Shift+Enter for new line</div>
-    </form>
-  );
-}
+// Format file size
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+};
 
-// Quick Actions Component
-function QuickActions({ onAction }) {
-  const actions = [
-    { icon: Icons.Globe, label: 'Research', description: 'Search and analyze information', prompt: 'Research' },
-    { icon: Icons.Code, label: 'Code', description: 'Write and debug code', prompt: 'Code' },
-    { icon: Icons.Lightning, label: 'Automate', description: 'Create workflows', prompt: 'Automate' },
-    { icon: Icons.Sparkle, label: 'Create', description: 'Generate content', prompt: 'Create' },
-  ];
-
-  return (
-    <div className="quick-actions">
-      {actions.map((action, index) => (
-        <button 
-          key={index}
-          className="quick-action-card"
-          onClick={() => onAction(action.prompt)}
-          style={{ animationDelay: `${index * 0.1}s` }}
-        >
-          <action.icon />
-          <span className="action-label">{action.label}</span>
-          <span className="action-description">{action.description}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
+// Format time ago
+const formatTimeAgo = (date) => {
+  const now = new Date();
+  const diff = now - new Date(date);
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  return `${days}d ago`;
+};
 
 // User Message Component
 function UserMessage({ message, time }) {
@@ -437,142 +337,239 @@ function UserMessage({ message, time }) {
   );
 }
 
-// Enhanced Thinking Indicator Component
+// ============================================================================
+// ENHANCED THINKING INDICATOR - Premium Design
+// ============================================================================
 function ThinkingIndicator({ phase, progress, details }) {
   const phases = [
-    { id: 'understanding', label: 'Understanding request', icon: Icons.Brain },
-    { id: 'planning', label: 'Planning approach', icon: Icons.Analyze },
-    { id: 'executing', label: 'Executing task', icon: Icons.Execute },
-    { id: 'reviewing', label: 'Reviewing output', icon: Icons.Review },
+    { id: 'understanding', label: 'Understanding request', icon: Icons.Brain, color: '#8b5cf6' },
+    { id: 'planning', label: 'Planning approach', icon: Icons.Analyze, color: '#3b82f6' },
+    { id: 'executing', label: 'Executing task', icon: Icons.Execute, color: '#10b981' },
+    { id: 'reviewing', label: 'Reviewing output', icon: Icons.Review, color: '#f59e0b' },
   ];
 
   const currentPhaseIndex = phases.findIndex(p => p.id === phase) || 0;
+  const currentPhase = phases[currentPhaseIndex];
 
   return (
-    <div className="thinking-indicator-enhanced">
-      <div className="thinking-header">
-        <div className="thinking-animation">
-          <div className="thinking-ring">
-            <div className="ring-segment"></div>
-            <div className="ring-segment"></div>
-            <div className="ring-segment"></div>
-          </div>
-          <Icons.Brain />
-        </div>
-        <div className="thinking-title">
-          <span className="title-text">Thinking</span>
-          <span className="thinking-dots-inline">
-            <span></span><span></span><span></span>
-          </span>
-        </div>
-      </div>
-      
-      <div className="thinking-phases">
-        {phases.map((p, index) => (
-          <div 
-            key={p.id}
-            className={`thinking-phase ${index < currentPhaseIndex ? 'completed' : ''} ${index === currentPhaseIndex ? 'active' : ''} ${index > currentPhaseIndex ? 'pending' : ''}`}
-          >
-            <div className="phase-icon">
-              {index < currentPhaseIndex ? (
-                <Icons.Check />
-              ) : index === currentPhaseIndex ? (
-                <span className="phase-spinner"></span>
-              ) : (
-                <p.icon />
-              )}
+    <div className="thinking-container">
+      {/* Main Thinking Card */}
+      <div className="thinking-card">
+        {/* Animated Header */}
+        <div className="thinking-header">
+          <div className="thinking-orb">
+            <div className="orb-ring orb-ring-1"></div>
+            <div className="orb-ring orb-ring-2"></div>
+            <div className="orb-ring orb-ring-3"></div>
+            <div className="orb-core">
+              <Icons.Brain />
             </div>
-            <span className="phase-label">{p.label}</span>
           </div>
-        ))}
+          <div className="thinking-title-section">
+            <h3 className="thinking-title">
+              Thinking
+              <span className="thinking-dots">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </span>
+            </h3>
+            <p className="thinking-subtitle">{currentPhase?.label || 'Processing...'}</p>
+          </div>
+        </div>
+
+        {/* Phase Progress */}
+        <div className="thinking-phases-grid">
+          {phases.map((p, index) => {
+            const isCompleted = index < currentPhaseIndex;
+            const isActive = index === currentPhaseIndex;
+            const isPending = index > currentPhaseIndex;
+            
+            return (
+              <div 
+                key={p.id}
+                className={`phase-item ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''} ${isPending ? 'pending' : ''}`}
+                style={{ '--phase-color': p.color }}
+              >
+                <div className="phase-icon-wrapper">
+                  {isCompleted ? (
+                    <div className="phase-check">
+                      <Icons.Check />
+                    </div>
+                  ) : isActive ? (
+                    <div className="phase-spinner-wrapper">
+                      <div className="phase-spinner"></div>
+                      <p.icon />
+                    </div>
+                  ) : (
+                    <div className="phase-icon-pending">
+                      <p.icon />
+                    </div>
+                  )}
+                </div>
+                <span className="phase-label">{p.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Progress Bar */}
+        {progress !== undefined && (
+          <div className="thinking-progress-section">
+            <div className="progress-bar-container">
+              <div className="progress-bar-track">
+                <div 
+                  className="progress-bar-fill"
+                  style={{ width: `${progress}%` }}
+                >
+                  <div className="progress-bar-glow"></div>
+                </div>
+              </div>
+              <span className="progress-percentage">{progress}%</span>
+            </div>
+          </div>
+        )}
+
+        {/* Details Section */}
+        {details && (
+          <div className="thinking-details-section">
+            <div className="detail-card">
+              <Icons.Terminal />
+              <span className="detail-text">{details}</span>
+            </div>
+          </div>
+        )}
       </div>
-
-      {details && (
-        <div className="thinking-details">
-          <div className="detail-item">
-            <Icons.Terminal />
-            <span>{details}</span>
-          </div>
-        </div>
-      )}
-
-      {progress !== undefined && (
-        <div className="thinking-progress">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-          </div>
-          <span className="progress-text">{progress}%</span>
-        </div>
-      )}
     </div>
   );
 }
 
-// Enhanced Step Item Component
-function StepItem({ step, index, isExpanded, onToggle, isLast }) {
+// ============================================================================
+// ENHANCED STEP ITEM - Timeline Design
+// ============================================================================
+function StepItem({ step, index, isExpanded, onToggle, isLast, totalSteps }) {
+  const [copied, setCopied] = useState(false);
+
   const getStepIcon = () => {
     if (step.status === 'completed') return <Icons.Check />;
-    if (step.status === 'running') return <span className="step-spinner"></span>;
-    if (step.status === 'error') return <span className="step-error">!</span>;
+    if (step.status === 'running') return <div className="step-spinner-mini"></div>;
+    if (step.status === 'error') return <Icons.Error />;
     return <span className="step-number">{index + 1}</span>;
   };
 
   const getStepCategory = () => {
     const title = (step.title || step.action || '').toLowerCase();
-    if (title.includes('analyz') || title.includes('understand') || title.includes('read')) return 'analyze';
-    if (title.includes('creat') || title.includes('writ') || title.includes('generat') || title.includes('build')) return 'create';
-    if (title.includes('execut') || title.includes('run') || title.includes('process')) return 'execute';
-    if (title.includes('review') || title.includes('check') || title.includes('verify')) return 'review';
+    if (title.includes('analyz') || title.includes('understand') || title.includes('read') || title.includes('observ')) return 'analyze';
+    if (title.includes('creat') || title.includes('writ') || title.includes('generat') || title.includes('build') || title.includes('sav')) return 'create';
+    if (title.includes('execut') || title.includes('run') || title.includes('process') || title.includes('python')) return 'execute';
+    if (title.includes('review') || title.includes('check') || title.includes('verify') || title.includes('termin') || title.includes('complet')) return 'review';
     return 'default';
+  };
+
+  const category = getStepCategory();
+  const categoryColors = {
+    analyze: { bg: '#eff6ff', border: '#3b82f6', text: '#1d4ed8' },
+    create: { bg: '#fff7ed', border: '#f97316', text: '#c2410c' },
+    execute: { bg: '#f0fdf4', border: '#22c55e', text: '#15803d' },
+    review: { bg: '#fefce8', border: '#eab308', text: '#a16207' },
+    default: { bg: '#f8fafc', border: '#94a3b8', text: '#475569' },
+  };
+
+  const colors = categoryColors[category];
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div 
-      className={`step-item-enhanced ${step.status || 'pending'} ${isExpanded ? 'expanded' : ''} category-${getStepCategory()}`}
+      className={`step-card ${step.status || 'pending'} ${isExpanded ? 'expanded' : ''}`}
+      style={{ '--step-color': colors.border, '--step-bg': colors.bg, '--step-text': colors.text }}
     >
-      <div className="step-connector">
-        <div className={`connector-line ${step.status === 'completed' ? 'completed' : ''}`}></div>
-        {!isLast && <div className="connector-line-bottom"></div>}
-      </div>
-      
-      <div className="step-content">
-        <div className="step-header" onClick={onToggle}>
-          <div className={`step-icon ${step.status || 'pending'}`}>
-            {getStepIcon()}
-          </div>
-          <div className="step-info">
-            <span className="step-title">{step.title || step.action}</span>
-            {step.duration && (
-              <span className="step-duration">{step.duration}</span>
-            )}
-          </div>
-          <span className="step-toggle">
-            {isExpanded ? <Icons.ChevronUp /> : <Icons.ChevronDown />}
-          </span>
+      {/* Timeline Connector */}
+      <div className="step-timeline">
+        <div className={`timeline-dot ${step.status}`}>
+          {getStepIcon()}
         </div>
-        
+        {!isLast && <div className={`timeline-line ${step.status === 'completed' ? 'completed' : ''}`}></div>}
+      </div>
+
+      {/* Step Content */}
+      <div className="step-body">
+        <div className="step-header" onClick={onToggle}>
+          <div className="step-header-left">
+            <span className={`step-category-badge category-${category}`}>
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+            <h4 className="step-title">{step.title || step.action}</h4>
+          </div>
+          <div className="step-header-right">
+            {step.duration && (
+              <span className="step-duration">
+                <Icons.Clock />
+                {step.duration}
+              </span>
+            )}
+            <button className="step-toggle-btn">
+              {isExpanded ? <Icons.ChevronUp /> : <Icons.ChevronDown />}
+            </button>
+          </div>
+        </div>
+
+        {/* Expanded Content */}
         {isExpanded && (
-          <div className="step-details-enhanced">
+          <div className="step-expanded-content">
             {step.description && (
               <p className="step-description">{step.description}</p>
             )}
+            
             {step.details && (
-              <div className="step-code-block">
-                <pre>{typeof step.details === 'object' ? JSON.stringify(step.details, null, 2) : step.details}</pre>
+              <div className="step-code-section">
+                <div className="code-header">
+                  <span className="code-label">
+                    <Icons.Terminal />
+                    Output
+                  </span>
+                  <button 
+                    className={`copy-btn ${copied ? 'copied' : ''}`}
+                    onClick={() => copyToClipboard(typeof step.details === 'object' ? JSON.stringify(step.details, null, 2) : step.details)}
+                  >
+                    <Icons.Copy />
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                <pre className="step-code">
+                  {typeof step.details === 'object' ? JSON.stringify(step.details, null, 2) : step.details}
+                </pre>
               </div>
             )}
+
             {step.output && (
-              <div className="step-output">
-                <span className="output-label">Output:</span>
-                <pre>{step.output}</pre>
+              <div className="step-output-section">
+                <div className="output-header">
+                  <Icons.Check />
+                  <span>Result</span>
+                </div>
+                <div className="output-content">
+                  {step.output}
+                </div>
               </div>
             )}
+
             {step.files && step.files.length > 0 && (
-              <div className="step-files">
-                <span className="files-label">Files created:</span>
-                <div className="files-list-mini">
+              <div className="step-files-section">
+                <div className="files-header">
+                  <Icons.File />
+                  <span>Files Created ({step.files.length})</span>
+                </div>
+                <div className="files-grid">
                   {step.files.map((file, i) => (
-                    <span key={i} className="file-tag">{file}</span>
+                    <div key={i} className="file-badge">
+                      <span className="file-icon">{getFileIcon(file)}</span>
+                      <span className="file-name">{file}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -584,33 +581,44 @@ function StepItem({ step, index, isExpanded, onToggle, isLast }) {
   );
 }
 
-// Markdown Code Block Component with Syntax Highlighting
+// ============================================================================
+// MARKDOWN CODE BLOCK - Enhanced Syntax Highlighting
+// ============================================================================
 const MarkdownCodeBlock = ({ node, inline, className, children, ...props }) => {
+  const [copied, setCopied] = useState(false);
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : '';
   const codeString = String(children).replace(/\n$/, '');
-  
-  if (!inline && language) {
+
+  const copyCode = () => {
+    navigator.clipboard.writeText(codeString);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (!inline && (language || codeString.includes('\n'))) {
     return (
-      <div className="markdown-code-block">
+      <div className="code-block-wrapper">
         <div className="code-block-header">
-          <span className="code-language">{language}</span>
-          <button 
-            className="copy-code-btn"
-            onClick={() => navigator.clipboard.writeText(codeString)}
-          >
-            <Icons.Copy /> Copy
+          <div className="code-block-lang">
+            <Icons.Code />
+            <span>{language || 'code'}</span>
+          </div>
+          <button className={`code-copy-btn ${copied ? 'copied' : ''}`} onClick={copyCode}>
+            <Icons.Copy />
+            <span>{copied ? 'Copied!' : 'Copy'}</span>
           </button>
         </div>
         <SyntaxHighlighter
           style={oneDark}
-          language={language}
+          language={language || 'text'}
           PreTag="div"
           customStyle={{
             margin: 0,
-            borderRadius: '0 0 8px 8px',
+            borderRadius: '0 0 12px 12px',
             fontSize: '13px',
-            padding: '16px',
+            padding: '20px',
+            background: '#1e1e2e',
           }}
           {...props}
         >
@@ -619,28 +627,7 @@ const MarkdownCodeBlock = ({ node, inline, className, children, ...props }) => {
       </div>
     );
   }
-  
-  if (!inline) {
-    return (
-      <div className="markdown-code-block">
-        <SyntaxHighlighter
-          style={oneDark}
-          language="text"
-          PreTag="div"
-          customStyle={{
-            margin: 0,
-            borderRadius: '8px',
-            fontSize: '13px',
-            padding: '16px',
-          }}
-          {...props}
-        >
-          {codeString}
-        </SyntaxHighlighter>
-      </div>
-    );
-  }
-  
+
   return (
     <code className="inline-code" {...props}>
       {children}
@@ -648,7 +635,9 @@ const MarkdownCodeBlock = ({ node, inline, className, children, ...props }) => {
   );
 };
 
-// Markdown Renderer Component
+// ============================================================================
+// MARKDOWN CONTENT RENDERER
+// ============================================================================
 function MarkdownContent({ content }) {
   return (
     <ReactMarkdown
@@ -691,13 +680,80 @@ function MarkdownContent({ content }) {
   );
 }
 
-// Enhanced Agent Response Component
-function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails, expandedSteps, onStepToggle }) {
+// ============================================================================
+// TASK SUMMARY COMPONENT - Shows at end of task
+// ============================================================================
+function TaskSummary({ steps, files, duration, status }) {
   const completedSteps = steps?.filter(s => s.status === 'completed').length || 0;
-  const totalSteps = steps?.length || 0;
+  const totalFiles = files?.length || 0;
 
   return (
-    <div className="message agent-message">
+    <div className={`task-summary-card ${status}`}>
+      <div className="summary-header">
+        <div className="summary-icon">
+          {status === 'success' ? <Icons.Success /> : status === 'error' ? <Icons.Error /> : <Icons.Info />}
+        </div>
+        <div className="summary-title">
+          <h3>{status === 'success' ? 'Task Completed' : status === 'error' ? 'Task Failed' : 'Task Summary'}</h3>
+          <p>{status === 'success' ? 'All operations completed successfully' : 'See details below'}</p>
+        </div>
+      </div>
+
+      <div className="summary-stats">
+        <div className="stat-item">
+          <span className="stat-value">{completedSteps}</span>
+          <span className="stat-label">Steps Completed</span>
+        </div>
+        <div className="stat-divider"></div>
+        <div className="stat-item">
+          <span className="stat-value">{totalFiles}</span>
+          <span className="stat-label">Files Created</span>
+        </div>
+        {duration && (
+          <>
+            <div className="stat-divider"></div>
+            <div className="stat-item">
+              <span className="stat-value">{duration}</span>
+              <span className="stat-label">Duration</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {files && files.length > 0 && (
+        <div className="summary-files">
+          <h4>Created Files</h4>
+          <div className="files-list">
+            {files.slice(0, 5).map((file, i) => {
+              const fileName = typeof file === 'string' ? file : file?.name || 'Unknown';
+              return (
+                <div key={i} className="file-item">
+                  <span className="file-icon">{getFileIcon(fileName)}</span>
+                  <span className="file-name">{fileName}</span>
+                </div>
+              );
+            })}
+            {files.length > 5 && (
+              <div className="files-more">+{files.length - 5} more files</div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// ENHANCED AGENT RESPONSE COMPONENT
+// ============================================================================
+function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails, expandedSteps, onStepToggle, files }) {
+  const completedSteps = steps?.filter(s => s.status === 'completed').length || 0;
+  const totalSteps = steps?.length || 0;
+  const isComplete = status === 'complete' || status === 'success';
+
+  return (
+    <div className="agent-response-wrapper">
+      {/* Thinking State */}
       {status === 'thinking' && (
         <ThinkingIndicator 
           phase={thinkingPhase || 'understanding'} 
@@ -706,13 +762,27 @@ function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails
         />
       )}
       
+      {/* Steps Timeline */}
       {steps && steps.length > 0 && (
-        <div className="agent-steps-enhanced">
+        <div className="steps-section">
           <div className="steps-header">
-            <span className="steps-title">Task Progress</span>
-            <span className="steps-count">{completedSteps}/{totalSteps} steps</span>
+            <div className="steps-title-section">
+              <h3 className="steps-title">Task Progress</h3>
+              <span className="steps-counter">{completedSteps}/{totalSteps} steps</span>
+            </div>
+            {totalSteps > 0 && (
+              <div className="steps-progress-mini">
+                <div className="progress-mini-bar">
+                  <div 
+                    className="progress-mini-fill"
+                    style={{ width: `${(completedSteps / totalSteps) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="steps-timeline">
+          
+          <div className="steps-timeline-container">
             {steps.map((step, index) => (
               <StepItem
                 key={step.id || index}
@@ -721,22 +791,37 @@ function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails
                 isExpanded={expandedSteps.includes(index)}
                 onToggle={() => onStepToggle(index)}
                 isLast={index === steps.length - 1}
+                totalSteps={totalSteps}
               />
             ))}
           </div>
         </div>
       )}
       
+      {/* Response Content */}
       {response && status !== 'thinking' && (
-        <div className="agent-response-content markdown-body">
-          <MarkdownContent content={response} />
+        <div className="response-section">
+          <div className="response-card">
+            <MarkdownContent content={response} />
+          </div>
         </div>
+      )}
+
+      {/* Task Summary - Show when complete */}
+      {isComplete && steps && steps.length > 0 && (
+        <TaskSummary 
+          steps={steps}
+          files={files}
+          status="success"
+        />
       )}
     </div>
   );
 }
 
-// Manus Computer Mini Bar
+// ============================================================================
+// MANUS COMPUTER MINI BAR
+// ============================================================================
 function ManusComputerMini({ currentStep, totalSteps, time, status, onExpand, onNavigate }) {
   return (
     <div className={`manus-computer-mini ${status}`}>
@@ -751,20 +836,19 @@ function ManusComputerMini({ currentStep, totalSteps, time, status, onExpand, on
         )}
       </div>
       <div className="computer-mini-center">
-        {currentStep && (
-          <span className="current-step-preview">{currentStep.title || currentStep.action}</span>
+        {totalSteps > 0 && (
+          <>
+            <button className="nav-btn" onClick={() => onNavigate('prev')} disabled={currentStep <= 1}>
+              <Icons.ArrowLeft />
+            </button>
+            <span className="step-indicator">{currentStep}/{totalSteps}</span>
+            <button className="nav-btn" onClick={() => onNavigate('next')} disabled={currentStep >= totalSteps}>
+              <Icons.ArrowRight />
+            </button>
+          </>
         )}
       </div>
       <div className="computer-mini-right">
-        <div className="step-navigation">
-          <button onClick={() => onNavigate(-1)} disabled={!totalSteps}>
-            <Icons.ArrowLeft />
-          </button>
-          <span className="step-counter">{totalSteps > 0 ? `${Math.min(totalSteps, totalSteps)}/${totalSteps}` : '0/0'}</span>
-          <button onClick={() => onNavigate(1)} disabled={!totalSteps}>
-            <Icons.ArrowRight />
-          </button>
-        </div>
         <button className="expand-btn" onClick={onExpand}>
           <Icons.Expand />
         </button>
@@ -773,822 +857,627 @@ function ManusComputerMini({ currentStep, totalSteps, time, status, onExpand, on
   );
 }
 
-// Manus Computer Expanded View
-function ManusComputerExpanded({ screenshot, currentStep, currentIndex, totalSteps, onClose, onNavigate }) {
+// ============================================================================
+// MANUS COMPUTER EXPANDED VIEW
+// ============================================================================
+function ManusComputerExpanded({ isOpen, onClose, currentStep, steps, screenshot }) {
+  if (!isOpen) return null;
+
   return (
-    <div className="manus-computer-expanded">
-      <div className="computer-overlay" onClick={onClose}></div>
-      <div className="computer-modal">
-        <div className="computer-header">
-          <div className="computer-title">
+    <div className="manus-computer-overlay" onClick={onClose}>
+      <div className="manus-computer-modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <div className="modal-title">
             <Icons.Computer />
             <span>Manus's Computer</span>
           </div>
-          <button className="close-btn" onClick={onClose}>
+          <button className="modal-close" onClick={onClose}>
             <Icons.Close />
           </button>
         </div>
-        <div className="computer-content">
-          {screenshot ? (
-            <img src={screenshot} alt="Screenshot" className="computer-screenshot" />
-          ) : (
-            <div className="computer-placeholder">
-              <Icons.Computer />
-              <span>No screenshot available</span>
-            </div>
-          )}
-        </div>
-        <div className="computer-footer">
-          <div className="step-info">
-            {currentStep && (
-              <>
-                <span className="step-action">{currentStep.title || currentStep.action}</span>
-                {currentStep.details && (
-                  <span className="step-detail">{typeof currentStep.details === 'string' ? currentStep.details : ''}</span>
-                )}
-              </>
+        <div className="modal-content">
+          <div className="computer-screen">
+            {screenshot ? (
+              <img src={screenshot} alt="Computer screen" />
+            ) : (
+              <div className="screen-placeholder">
+                <Icons.Computer />
+                <p>No screen capture available</p>
+              </div>
             )}
           </div>
-          <div className="step-navigation">
-            <button onClick={() => onNavigate(-1)} disabled={currentIndex <= 0}>
-              <Icons.ArrowLeft />
-            </button>
-            <span className="step-counter">{currentIndex + 1}/{totalSteps}</span>
-            <button onClick={() => onNavigate(1)} disabled={currentIndex >= totalSteps - 1}>
-              <Icons.ArrowRight />
-            </button>
-          </div>
+          {steps && steps[currentStep - 1] && (
+            <div className="current-step-info">
+              <h4>Current Step: {steps[currentStep - 1].title}</h4>
+              <p>{steps[currentStep - 1].description}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-// File icon helper
-function getFileIcon(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  const iconMap = {
-    'html': '🌐',
-    'css': '🎨',
-    'js': '📜',
-    'jsx': '⚛️',
-    'ts': '📘',
-    'tsx': '📘',
-    'json': '📋',
-    'md': '📝',
-    'py': '🐍',
-    'png': '🖼️',
-    'jpg': '🖼️',
-    'jpeg': '🖼️',
-    'gif': '🖼️',
-    'svg': '🎨',
-    'pdf': '📕',
-    'txt': '📄',
-    'zip': '📦',
-  };
-  return iconMap[ext] || '📄';
-}
+// ============================================================================
+// FILES PANEL COMPONENT
+// ============================================================================
+function FilesPanel({ files, sortBy, onSortChange, onFileSelect, selectedFile }) {
+  const [showSortMenu, setShowSortMenu] = useState(false);
 
-// Sort Dropdown Component
-function SortDropdown({ sortBy, sortOrder, onSortChange }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const currentOption = SORT_OPTIONS.find(o => o.id === sortBy);
-
-  return (
-    <div className="sort-dropdown" ref={dropdownRef}>
-      <button 
-        className={`sort-trigger ${isOpen ? 'open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <currentOption.icon />
-        <span>{currentOption.label}</span>
-        <Icons.ChevronDown />
-      </button>
-      
-      {isOpen && (
-        <div className="sort-menu">
-          <div className="sort-menu-header">Sort by</div>
-          {SORT_OPTIONS.map(option => (
-            <button
-              key={option.id}
-              className={`sort-option ${sortBy === option.id ? 'active' : ''}`}
-              onClick={() => {
-                onSortChange(option.id, sortBy === option.id ? (sortOrder === 'asc' ? 'desc' : 'asc') : 'asc');
-                setIsOpen(false);
-              }}
-            >
-              <option.icon />
-              <span>{option.label}</span>
-              {sortBy === option.id && (
-                <span className="sort-direction">
-                  {sortOrder === 'asc' ? <Icons.SortAsc /> : <Icons.SortDesc />}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Enhanced Files Panel Component
-function FilesPanel({ files, selectedFile, onSelectFile, onDownload, activeTab, onTabChange, previewUrl, width, onResize }) {
-  const [isResizing, setIsResizing] = useState(false);
-  const [sortBy, setSortBy] = useState('type');
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [prettyPrint, setPrettyPrint] = useState(false);
-  const panelRef = useRef(null);
-
-  const handleMouseDown = useCallback((e) => {
-    e.preventDefault();
-    setIsResizing(true);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!isResizing) return;
-      const newWidth = window.innerWidth - e.clientX;
-      if (newWidth >= 300 && newWidth <= 800) {
-        onResize(newWidth);
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
-
-    if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isResizing, onResize]);
-
-  // Sort files
   const sortedFiles = useMemo(() => {
-    const sorted = [...files].sort((a, b) => {
-      let comparison = 0;
-      
-      switch (sortBy) {
-        case 'type':
-          const extA = a.name.split('.').pop().toLowerCase();
-          const extB = b.name.split('.').pop().toLowerCase();
-          const priorityA = FILE_TYPE_PRIORITY[extA] || 99;
-          const priorityB = FILE_TYPE_PRIORITY[extB] || 99;
-          comparison = priorityA - priorityB;
-          break;
-        case 'date':
-          const dateA = a.modified ? new Date(a.modified).getTime() : 0;
-          const dateB = b.modified ? new Date(b.modified).getTime() : 0;
-          comparison = dateB - dateA; // Newest first by default
-          break;
-        case 'size':
-          const sizeA = typeof a.size === 'number' ? a.size : parseInt(a.size) || 0;
-          const sizeB = typeof b.size === 'number' ? b.size : parseInt(b.size) || 0;
-          comparison = sizeB - sizeA; // Largest first by default
-          break;
-        case 'name':
-          comparison = a.name.localeCompare(b.name);
-          break;
-        default:
-          comparison = 0;
-      }
-      
-      return sortOrder === 'desc' ? -comparison : comparison;
-    });
+    if (!files) return [];
+    
+    let sorted = [...files];
+    
+    switch (sortBy) {
+      case 'type':
+        sorted.sort((a, b) => {
+          const extA = getFileExtension(a.name);
+          const extB = getFileExtension(b.name);
+          return (FILE_TYPE_PRIORITY[extA] || 99) - (FILE_TYPE_PRIORITY[extB] || 99);
+        });
+        break;
+      case 'date':
+        sorted.sort((a, b) => new Date(b.modified || 0) - new Date(a.modified || 0));
+        break;
+      case 'size':
+        sorted.sort((a, b) => (b.size || 0) - (a.size || 0));
+        break;
+      case 'name':
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        break;
+    }
     
     return sorted;
-  }, [files, sortBy, sortOrder]);
+  }, [files, sortBy]);
 
-  // Group files by type when sorting by type
   const groupedFiles = useMemo(() => {
     if (sortBy !== 'type') return null;
     
     const groups = {};
     sortedFiles.forEach(file => {
-      const ext = file.name.split('.').pop().toLowerCase();
-      const groupName = getFileGroupName(ext);
-      if (!groups[groupName]) {
-        groups[groupName] = [];
-      }
-      groups[groupName].push(file);
+      const group = getFileTypeGroup(file.name);
+      if (!groups[group]) groups[group] = [];
+      groups[group].push(file);
     });
-    
     return groups;
   }, [sortedFiles, sortBy]);
 
-  const handleSortChange = (newSortBy, newSortOrder) => {
-    setSortBy(newSortBy);
-    setSortOrder(newSortOrder);
-  };
+  const currentSortOption = SORT_OPTIONS.find(opt => opt.id === sortBy);
 
   return (
-    <div 
-      ref={panelRef}
-      className={`files-panel ${isResizing ? 'resizing' : ''}`} 
-      style={{ width: `${width}px` }}
-    >
-      <div 
-        className="resize-handle"
-        onMouseDown={handleMouseDown}
-      >
-        <div className="resize-line"></div>
-      </div>
-      
-      <div className="panel-header">
-        <div className="panel-tabs">
+    <div className="files-panel">
+      <div className="files-panel-header">
+        <h3>Files <span className="file-count">{files?.length || 0}</span></h3>
+        <div className="sort-dropdown">
           <button 
-            className={`panel-tab ${activeTab === 'preview' ? 'active' : ''}`}
-            onClick={() => onTabChange('preview')}
+            className="sort-trigger"
+            onClick={() => setShowSortMenu(!showSortMenu)}
           >
-            Preview
+            {currentSortOption && <currentSortOption.icon />}
+            <span>{currentSortOption?.label}</span>
+            <Icons.ChevronDown />
           </button>
-          <button 
-            className={`panel-tab ${activeTab === 'code' ? 'active' : ''}`}
-            onClick={() => onTabChange('code')}
-          >
-            Code
-          </button>
-          <button 
-            className={`panel-tab ${activeTab === 'files' ? 'active' : ''}`}
-            onClick={() => onTabChange('files')}
-          >
-            Files <span className="file-count">{files.length}</span>
-          </button>
-        </div>
-        <div className="panel-actions">
-          <button className="panel-action"><Icons.Expand /></button>
-        </div>
-      </div>
-
-      <div className="panel-content">
-        {activeTab === 'preview' && (
-          <div className="preview-container">
-            {previewUrl ? (
-              <>
-                <div className="preview-filename">{selectedFile?.name}</div>
-                <iframe 
-                  src={previewUrl} 
-                  title="Preview"
-                  className="preview-iframe"
-                />
-              </>
-            ) : (
-              <div className="preview-empty">
-                <Icons.Image />
-                <span>Select an HTML file to preview</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'code' && (
-          <div className="code-container">
-            {selectedFile ? (
-              <>
-                <div className="code-header">
-                  <span className="code-filename">{selectedFile.name}</span>
-                  <label className="pretty-print-toggle">
-                    <input 
-                      type="checkbox" 
-                      checked={prettyPrint} 
-                      onChange={(e) => setPrettyPrint(e.target.checked)}
-                    />
-                    <span>Pretty-print</span>
-                  </label>
-                </div>
-                <pre className={`code-content ${prettyPrint ? 'pretty' : ''}`}>
-                  {selectedFile.content || '{"detail":"Not Found"}'}
-                </pre>
-              </>
-            ) : (
-              <div className="code-empty">
-                <Icons.Code />
-                <span>Select a file to view code</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'files' && (
-          <div className="files-container">
-            <div className="files-toolbar">
-              <SortDropdown 
-                sortBy={sortBy} 
-                sortOrder={sortOrder} 
-                onSortChange={handleSortChange}
-              />
+          {showSortMenu && (
+            <div className="sort-menu">
+              {SORT_OPTIONS.map(option => (
+                <button
+                  key={option.id}
+                  className={`sort-option ${sortBy === option.id ? 'active' : ''}`}
+                  onClick={() => {
+                    onSortChange(option.id);
+                    setShowSortMenu(false);
+                  }}
+                >
+                  <option.icon />
+                  <span>{option.label}</span>
+                  {sortBy === option.id && <Icons.Check />}
+                </button>
+              ))}
             </div>
-            
-            <div className="files-list">
-              {sortBy === 'type' && groupedFiles ? (
-                Object.entries(groupedFiles).map(([groupName, groupFiles]) => (
-                  <div key={groupName} className="file-group">
-                    <div className="file-group-header">
-                      <span className="group-name">{groupName}</span>
-                      <span className="group-count">{groupFiles.length}</span>
-                    </div>
-                    {groupFiles.map((file, index) => (
-                      <FileItem
-                        key={file.name + index}
-                        file={file}
-                        isSelected={selectedFile?.name === file.name}
-                        onSelect={onSelectFile}
-                        onDownload={onDownload}
-                        index={index}
-                      />
-                    ))}
-                  </div>
-                ))
-              ) : (
-                sortedFiles.map((file, index) => (
-                  <FileItem
-                    key={file.name + index}
-                    file={file}
-                    isSelected={selectedFile?.name === file.name}
-                    onSelect={onSelectFile}
-                    onDownload={onDownload}
-                    index={index}
-                  />
-                ))
+          )}
+        </div>
+      </div>
+
+      <div className="files-list-container">
+        {sortBy === 'type' && groupedFiles ? (
+          Object.entries(groupedFiles).map(([group, groupFiles]) => (
+            <div key={group} className="file-group">
+              <div className="file-group-header">{group}</div>
+              {groupFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className={`file-item ${selectedFile === file.name ? 'selected' : ''}`}
+                  onClick={() => onFileSelect(file)}
+                >
+                  <span className="file-icon">{getFileIcon(file.name)}</span>
+                  <span className="file-name">{file.name}</span>
+                  {file.size && <span className="file-size">{formatFileSize(file.size)}</span>}
+                </div>
+              ))}
+            </div>
+          ))
+        ) : (
+          sortedFiles.map((file, index) => (
+            <div
+              key={index}
+              className={`file-item ${selectedFile === file.name ? 'selected' : ''}`}
+              onClick={() => onFileSelect(file)}
+            >
+              <span className="file-icon">{getFileIcon(file.name)}</span>
+              <span className="file-name">{file.name}</span>
+              {sortBy === 'size' && file.size && (
+                <span className="file-size">{formatFileSize(file.size)}</span>
+              )}
+              {sortBy === 'date' && file.modified && (
+                <span className="file-date">{formatTimeAgo(file.modified)}</span>
               )}
             </div>
-          </div>
+          ))
         )}
       </div>
     </div>
   );
 }
 
-// File Item Component
-function FileItem({ file, isSelected, onSelect, onDownload, index }) {
-  return (
-    <div 
-      className={`file-item ${isSelected ? 'selected' : ''}`}
-      onClick={() => onSelect(file)}
-      style={{ animationDelay: `${index * 0.03}s` }}
-    >
-      <span className="file-icon">{getFileIcon(file.name)}</span>
-      <div className="file-info">
-        <span className="file-name">{file.name}</span>
-        <span className="file-size">{formatFileSize(file.size)}</span>
-      </div>
-      <button 
-        className="file-download"
-        onClick={(e) => { e.stopPropagation(); onDownload(file); }}
-        title="Download file"
-      >
-        <Icons.Download />
-      </button>
-    </div>
-  );
-}
-
-// Helper function to get file group name
-function getFileGroupName(ext) {
-  const groups = {
-    'html': 'Web Pages',
-    'css': 'Stylesheets',
-    'js': 'JavaScript',
-    'jsx': 'React Components',
-    'ts': 'TypeScript',
-    'tsx': 'TypeScript React',
-    'json': 'Data Files',
-    'md': 'Documentation',
-    'py': 'Python',
-    'png': 'Images',
-    'jpg': 'Images',
-    'jpeg': 'Images',
-    'gif': 'Images',
-    'svg': 'Vector Graphics',
-    'pdf': 'Documents',
-    'txt': 'Text Files',
-    'zip': 'Archives',
-  };
-  return groups[ext] || 'Other Files';
-}
-
-// Helper function to format file size
-function formatFileSize(size) {
-  if (typeof size === 'string') return size;
-  if (!size) return '0 B';
-  
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let unitIndex = 0;
-  let fileSize = size;
-  
-  while (fileSize >= 1024 && unitIndex < units.length - 1) {
-    fileSize /= 1024;
-    unitIndex++;
-  }
-  
-  return `${fileSize.toFixed(unitIndex > 0 ? 1 : 0)} ${units[unitIndex]}`;
-}
-
-// Main App Component
+// ============================================================================
+// MAIN APP COMPONENT
+// ============================================================================
 function App() {
-  const [connected, setConnected] = useState(false);
-  const [tasks, setTasks] = useState([]);
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(-1);
   const [messages, setMessages] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [activeTab, setActiveTab] = useState('preview');
-  const [panelWidth, setPanelWidth] = useState(450);
+  const [inputValue, setInputValue] = useState('');
+  const [isConnected, setIsConnected] = useState(true);
+  const [currentTask, setCurrentTask] = useState(null);
   const [expandedSteps, setExpandedSteps] = useState([]);
-  const [showComputer, setShowComputer] = useState(false);
-  const [computerIndex, setComputerIndex] = useState(0);
-  const [previewUrl, setPreviewUrl] = useState('');
-  const [thinkingPhase, setThinkingPhase] = useState('understanding');
-  const [thinkingDetails, setThinkingDetails] = useState('');
-  
-  const wsRef = useRef(null);
+  const [rightPanelTab, setRightPanelTab] = useState('preview');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [sortBy, setSortBy] = useState('type');
+  const [showManusExpanded, setShowManusExpanded] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(1);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
-  // WebSocket connection
-  useEffect(() => {
-    const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
-    const wsUrl = window.location.hostname === 'localhost' 
-      ? `ws://localhost:8000/ws/${sessionId}`
-      : `wss://${window.location.hostname.replace('3003', '8000')}/ws/${sessionId}`;
-    
-    const connect = () => {
-      wsRef.current = new WebSocket(wsUrl);
-      
-      wsRef.current.onopen = () => {
-        console.log('WebSocket connected');
-        setConnected(true);
-      };
-      
-      wsRef.current.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        handleWebSocketMessage(data);
-      };
-      
-      wsRef.current.onclose = () => {
-        console.log('WebSocket disconnected');
-        setConnected(false);
-        setTimeout(connect, 3000);
-      };
-      
-      wsRef.current.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
-    };
-    
-    connect();
-    
-    return () => {
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
-    };
+  // Sample files for demo
+  const [files, setFiles] = useState([
+    { name: 'index.html', size: 4520, modified: new Date() },
+    { name: 'styles.css', size: 2340, modified: new Date(Date.now() - 3600000) },
+    { name: 'app.js', size: 8900, modified: new Date(Date.now() - 7200000) },
+    { name: 'utils.js', size: 1200, modified: new Date(Date.now() - 86400000) },
+    { name: 'data.json', size: 15600, modified: new Date(Date.now() - 172800000) },
+    { name: 'README.md', size: 890, modified: new Date(Date.now() - 259200000) },
+    { name: 'logo.png', size: 45000, modified: new Date(Date.now() - 345600000) },
+    { name: 'favicon.svg', size: 1200, modified: new Date(Date.now() - 432000000) },
+  ]);
+
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const handleWebSocketMessage = (data) => {
-    console.log('WS Message:', data);
-    
-    switch (data.type) {
-      case 'status':
-        if (currentTaskIndex >= 0) {
-          setTasks(prev => {
-            const updated = [...prev];
-            if (updated[currentTaskIndex]) {
-              updated[currentTaskIndex].status = data.data.status;
-            }
-            return updated;
-          });
-        }
-        break;
-      
-      case 'thinking':
-        setThinkingPhase(data.data.phase || 'understanding');
-        setThinkingDetails(data.data.details || '');
-        break;
-        
-      case 'step':
-        setMessages(prev => {
-          const updated = [...prev];
-          const lastMsg = updated[updated.length - 1];
-          if (lastMsg && lastMsg.type === 'agent') {
-            lastMsg.steps = lastMsg.steps || [];
-            const existingIndex = lastMsg.steps.findIndex(s => s.id === data.data.id);
-            if (existingIndex >= 0) {
-              lastMsg.steps[existingIndex] = { ...lastMsg.steps[existingIndex], ...data.data };
-            } else {
-              lastMsg.steps.push(data.data);
-            }
-          }
-          return updated;
-        });
-        // Update thinking phase based on step
-        if (data.data.status === 'running') {
-          setThinkingPhase('executing');
-        }
-        break;
-        
-      case 'step_update':
-        setMessages(prev => {
-          const updated = [...prev];
-          const lastMsg = updated[updated.length - 1];
-          if (lastMsg && lastMsg.type === 'agent' && lastMsg.steps) {
-            const stepIndex = lastMsg.steps.findIndex(s => s.id === data.data.id);
-            if (stepIndex >= 0) {
-              lastMsg.steps[stepIndex].status = data.data.status;
-            }
-          }
-          return updated;
-        });
-        break;
-        
-      case 'response':
-        setThinkingPhase('reviewing');
-        setMessages(prev => {
-          const updated = [...prev];
-          const lastMsg = updated[updated.length - 1];
-          if (lastMsg && lastMsg.type === 'agent') {
-            lastMsg.response = data.data.message;
-            lastMsg.status = data.data.status;
-          }
-          return updated;
-        });
-        break;
-        
-      case 'message':
-        if (data.data.role === 'assistant') {
-          setMessages(prev => {
-            const updated = [...prev];
-            const lastMsg = updated[updated.length - 1];
-            if (lastMsg && lastMsg.type === 'agent') {
-              lastMsg.response = data.data.content;
-              lastMsg.status = 'completed';
-            }
-            return updated;
-          });
-          if (currentTaskIndex >= 0) {
-            setTasks(prev => {
-              const updated = [...prev];
-              if (updated[currentTaskIndex]) {
-                updated[currentTaskIndex].status = 'completed';
-              }
-              return updated;
-            });
-          }
-        }
-        break;
-        
-      case 'files':
-        setFiles(data.data.files || []);
-        break;
-        
-      case 'file_content':
-        setSelectedFile(prev => ({
-          ...prev,
-          content: data.data.content
-        }));
-        break;
-        
-      default:
-        console.log('Unknown message type:', data.type);
-    }
-  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
 
-  const handleSendMessage = (message) => {
-    if (!message.trim()) return;
-    
-    const time = new Date().toLocaleTimeString();
-    
-    // Reset thinking state
-    setThinkingPhase('understanding');
-    setThinkingDetails('');
-    
-    setMessages(prev => [...prev, {
-      type: 'user',
-      message,
-      time
-    }]);
-    
-    setMessages(prev => [...prev, {
-      type: 'agent',
-      response: '',
-      steps: [],
-      status: 'thinking'
-    }]);
-    
-    const newTask = {
-      title: message.length > 40 ? message.substring(0, 40) + '...' : message,
-      message,
-      status: 'running',
-      time
-    };
-    setTasks(prev => [newTask, ...prev]);
-    setCurrentTaskIndex(0);
-    
-    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify({
-        type: 'chat',
-        prompt: message
-      }));
-    }
-  };
-
-  const handleSelectFile = async (file) => {
-    setSelectedFile(file);
-    
-    if (file.name.endsWith('.html')) {
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        wsRef.current.send(JSON.stringify({
-          type: 'get_file',
-          filename: file.name
-        }));
-      }
-      
-      const baseUrl = window.location.hostname === 'localhost'
-        ? 'http://localhost:8000'
-        : `https://${window.location.hostname.replace('3003', '8000')}`;
-      setPreviewUrl(`${baseUrl}/files/${file.name}`);
-      setActiveTab('preview');
-    } else {
-      setPreviewUrl('');
-      setActiveTab('code');
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        wsRef.current.send(JSON.stringify({
-          type: 'get_file',
-          filename: file.name
-        }));
-      }
-    }
-  };
-
-  const handleDownload = (file) => {
-    const baseUrl = window.location.hostname === 'localhost'
-      ? 'http://localhost:8000'
-      : `https://${window.location.hostname.replace('3003', '8000')}`;
-    window.open(`${baseUrl}/download/${file.name}`, '_blank');
-  };
-
-  const handleStepToggle = (index) => {
+  const handleStepToggle = useCallback((index) => {
     setExpandedSteps(prev => 
       prev.includes(index) 
         ? prev.filter(i => i !== index)
         : [...prev, index]
     );
-  };
+  }, []);
 
-  const handleNewTask = () => {
-    setMessages([]);
-    setCurrentTaskIndex(-1);
-    setExpandedSteps([]);
-    setThinkingPhase('understanding');
-    setThinkingDetails('');
-  };
-
-  const handleSelectTask = (index) => {
-    setCurrentTaskIndex(index);
-  };
-
-  const handleComputerNavigate = (direction) => {
-    const lastAgentMsg = messages.filter(m => m.type === 'agent').pop();
-    const totalSteps = lastAgentMsg?.steps?.length || 0;
-    
-    setComputerIndex(prev => {
-      const newIndex = prev + direction;
-      if (newIndex >= 0 && newIndex < totalSteps) {
-        return newIndex;
-      }
-      return prev;
+  const simulateAgentResponse = useCallback((userMessage) => {
+    // Create task with thinking state
+    const taskId = Date.now();
+    setCurrentTask({
+      id: taskId,
+      status: 'thinking',
+      thinkingPhase: 'understanding',
+      steps: [],
+      response: null,
     });
-  };
 
-  const getCurrentStep = () => {
-    const lastAgentMsg = messages.filter(m => m.type === 'agent').pop();
-    return lastAgentMsg?.steps?.[computerIndex];
-  };
+    // Simulate thinking phases
+    const phases = ['understanding', 'planning', 'executing', 'reviewing'];
+    let phaseIndex = 0;
 
-  const getTotalSteps = () => {
-    const lastAgentMsg = messages.filter(m => m.type === 'agent').pop();
-    return lastAgentMsg?.steps?.length || 0;
-  };
+    const phaseInterval = setInterval(() => {
+      phaseIndex++;
+      if (phaseIndex < phases.length) {
+        setCurrentTask(prev => ({
+          ...prev,
+          thinkingPhase: phases[phaseIndex],
+        }));
+      }
+    }, 1500);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    // Simulate steps
+    setTimeout(() => {
+      const steps = [
+        { id: 1, title: 'Analyzing task', action: 'analyze', status: 'completed', description: 'Understanding the requirements and planning the approach.' },
+        { id: 2, title: 'Executing task', action: 'execute', status: 'completed', description: 'Running the necessary operations.', details: "{'observation': '55\\n', 'success': True}" },
+      ];
+      
+      setCurrentTask(prev => ({
+        ...prev,
+        steps: steps,
+      }));
+    }, 2000);
 
-  const hasMessages = messages.length > 0;
+    // Complete the task
+    setTimeout(() => {
+      clearInterval(phaseInterval);
+      
+      const response = `## Task Completed Successfully! 🎉
+
+I've created a Python function to calculate Fibonacci numbers with comprehensive documentation.
+
+### Function Overview
+
+The \`fibonacci(n)\` function calculates the n-th Fibonacci number using an iterative approach for optimal performance.
+
+\`\`\`python
+def fibonacci(n):
+    """
+    Calculate the n-th Fibonacci number.
+    
+    Args:
+        n (int): The position in the Fibonacci sequence (0-indexed)
+        
+    Returns:
+        int: The n-th Fibonacci number
+        
+    Raises:
+        ValueError: If n is negative
+        
+    Example:
+        >>> fibonacci(10)
+        55
+    """
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    if n <= 1:
+        return n
+    
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b
+\`\`\`
+
+### Features
+
+- **Efficient**: Uses O(n) time complexity
+- **Memory-safe**: O(1) space complexity
+- **Well-documented**: Includes docstring with examples
+- **Error handling**: Validates input parameters
+
+### Usage Example
+
+\`\`\`python
+# Calculate the 10th Fibonacci number
+result = fibonacci(10)
+print(f"The 10th Fibonacci number is: {result}")
+# Output: The 10th Fibonacci number is: 55
+\`\`\`
+
+Would you like me to:
+- Save this to a file?
+- Add more features?
+- Create unit tests?`;
+
+      setCurrentTask(prev => ({
+        ...prev,
+        status: 'complete',
+        response: response,
+        thinkingPhase: null,
+      }));
+
+      // Add new files
+      setFiles(prev => [
+        { name: 'fibonacci.py', size: 1250, modified: new Date() },
+        ...prev,
+      ]);
+    }, 6000);
+  }, []);
+
+  const handleSendMessage = useCallback(() => {
+    if (!inputValue.trim()) return;
+
+    const newMessage = {
+      id: Date.now(),
+      type: 'user',
+      content: inputValue,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    setMessages(prev => [...prev, newMessage]);
+    setInputValue('');
+    setExpandedSteps([]);
+    
+    simulateAgentResponse(inputValue);
+  }, [inputValue, simulateAgentResponse]);
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  }, [handleSendMessage]);
+
+  const handleQuickAction = useCallback((action) => {
+    const prompts = {
+      research: 'Research the latest trends in AI and machine learning',
+      code: 'Write a Python function to sort a list of numbers',
+      automate: 'Create a workflow to automate daily tasks',
+      create: 'Generate a creative story about space exploration',
+    };
+    setInputValue(prompts[action] || '');
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <div className="app">
-      <Sidebar 
-        tasks={tasks}
-        currentTask={currentTaskIndex}
-        onNewTask={handleNewTask}
-        onSelectTask={handleSelectTask}
-      />
-      
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="logo">
+            <Icons.Logo />
+            <span>supermanus</span>
+          </div>
+        </div>
+
+        <div className="sidebar-actions">
+          <button className="sidebar-btn primary">
+            <Icons.NewTask />
+            <span>New task</span>
+          </button>
+          <button className="sidebar-btn">
+            <Icons.Search />
+            <span>Search</span>
+            <kbd>Ctrl+K</kbd>
+          </button>
+          <button className="sidebar-btn">
+            <Icons.Library />
+            <span>Library</span>
+          </button>
+        </div>
+
+        <div className="sidebar-section">
+          <h3 className="section-title">PROJECTS</h3>
+        </div>
+
+        <div className="sidebar-section">
+          <h3 className="section-title">ALL TASKS</h3>
+          {messages.filter(m => m.type === 'user').slice(-5).map((msg, index) => (
+            <button key={index} className="task-item">
+              <span className="task-title">{msg.content.substring(0, 30)}...</span>
+              {index === 0 && <span className="task-active"></span>}
+            </button>
+          ))}
+        </div>
+
+        <div className="sidebar-footer">
+          <button className="sidebar-btn share-btn">
+            <Icons.Share />
+            <div className="share-text">
+              <span>Share SuperManus with a friend</span>
+              <small>Get 500 credits each</small>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
       <main className="main-content">
-        <TopBar connected={connected} />
-        
-        <div className="content-area">
-          <div className="chat-area">
-            {!hasMessages ? (
+        {/* Top Bar */}
+        <header className="topbar">
+          <div className="topbar-left">
+            <span className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
+              <span className="status-dot"></span>
+              {isConnected ? 'Connected' : 'Disconnected'}
+            </span>
+          </div>
+          <div className="topbar-center">
+            <h1>SuperManus V3</h1>
+          </div>
+          <div className="topbar-right">
+            <button className="topbar-btn"><Icons.Settings /></button>
+            <button className="topbar-btn"><Icons.Expand /></button>
+            <button className="topbar-btn primary"><Icons.Share /> Share</button>
+          </div>
+        </header>
+
+        {/* Chat Area */}
+        <div className="chat-container">
+          <div className="messages-area">
+            {messages.length === 0 && !currentTask ? (
               <div className="welcome-screen">
-                <h1>What can I do for you?</h1>
-                <ChatInput onSend={handleSendMessage} disabled={!connected} />
-                <QuickActions onAction={(action) => handleSendMessage(action)} />
-                <div className="connect-tools">
-                  <span>🔗 Connect your tools to SuperManus</span>
+                <h2>What can I do for you?</h2>
+                <div className="input-wrapper welcome-input">
+                  <textarea
+                    ref={inputRef}
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="What can I do for you?"
+                    rows={1}
+                  />
+                  <div className="input-actions">
+                    <button className="input-btn" title="Add emoji"><Icons.Emoji /></button>
+                    <button className="input-btn" title="Voice input"><Icons.Mic /></button>
+                    <button 
+                      className={`send-btn ${inputValue.trim() ? 'active' : ''}`}
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim()}
+                    >
+                      <Icons.Send />
+                    </button>
+                  </div>
+                </div>
+                <p className="input-hint">Press Enter to send, Shift+Enter for new line</p>
+
+                <div className="quick-actions">
+                  <button className="quick-action-btn" onClick={() => handleQuickAction('research')}>
+                    <Icons.Globe />
+                    <span className="action-title">Research</span>
+                    <span className="action-desc">Search and analyze information</span>
+                  </button>
+                  <button className="quick-action-btn" onClick={() => handleQuickAction('code')}>
+                    <Icons.Code />
+                    <span className="action-title">Code</span>
+                    <span className="action-desc">Write and debug code</span>
+                  </button>
+                  <button className="quick-action-btn" onClick={() => handleQuickAction('automate')}>
+                    <Icons.Lightning />
+                    <span className="action-title">Automate</span>
+                    <span className="action-desc">Create workflows</span>
+                  </button>
+                  <button className="quick-action-btn" onClick={() => handleQuickAction('create')}>
+                    <Icons.Sparkle />
+                    <span className="action-title">Create</span>
+                    <span className="action-desc">Generate content</span>
+                  </button>
+                </div>
+
+                <div className="tools-link">
+                  <Icons.Settings />
+                  <span>Connect your tools to SuperManus</span>
                 </div>
               </div>
             ) : (
-              <>
-                <div className="conversation-container">
-                  {messages.map((msg, index) => (
-                    msg.type === 'user' ? (
-                      <UserMessage 
-                        key={index}
-                        message={msg.message}
-                        time={msg.time}
-                      />
-                    ) : (
-                      <AgentResponse
-                        key={index}
-                        response={msg.response}
-                        steps={msg.steps}
-                        status={msg.status}
-                        thinkingPhase={thinkingPhase}
-                        thinkingDetails={thinkingDetails}
-                        expandedSteps={expandedSteps}
-                        onStepToggle={handleStepToggle}
-                      />
-                    )
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
+              <div className="messages-list">
+                {messages.map((msg) => (
+                  msg.type === 'user' ? (
+                    <UserMessage key={msg.id} message={msg.content} time={msg.time} />
+                  ) : null
+                ))}
                 
-                <div className="chat-input-fixed">
-                  <ChatInput onSend={handleSendMessage} disabled={!connected} />
-                </div>
-              </>
+                {currentTask && (
+                  <AgentResponse
+                    response={currentTask.response}
+                    steps={currentTask.steps}
+                    status={currentTask.status}
+                    thinkingPhase={currentTask.thinkingPhase}
+                    thinkingDetails={currentTask.thinkingDetails}
+                    expandedSteps={expandedSteps}
+                    onStepToggle={handleStepToggle}
+                    files={files}
+                  />
+                )}
+                
+                <div ref={messagesEndRef} />
+              </div>
             )}
           </div>
-          
-          {hasMessages && (
-            <FilesPanel
-              files={files}
-              selectedFile={selectedFile}
-              onSelectFile={handleSelectFile}
-              onDownload={handleDownload}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              previewUrl={previewUrl}
-              width={panelWidth}
-              onResize={setPanelWidth}
-            />
+
+          {/* Input Area (when not welcome screen) */}
+          {(messages.length > 0 || currentTask) && (
+            <div className="input-area">
+              <div className="input-wrapper">
+                <textarea
+                  ref={inputRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="What can I do for you?"
+                  rows={1}
+                />
+                <div className="input-actions">
+                  <button className="input-btn" title="Add emoji"><Icons.Emoji /></button>
+                  <button className="input-btn" title="Voice input"><Icons.Mic /></button>
+                  <button 
+                    className={`send-btn ${inputValue.trim() ? 'active' : ''}`}
+                    onClick={handleSendMessage}
+                    disabled={!inputValue.trim()}
+                  >
+                    <Icons.Send />
+                  </button>
+                </div>
+              </div>
+              <p className="input-hint">Press Enter to send, Shift+Enter for new line</p>
+            </div>
           )}
         </div>
-        
-        {/* Manus Computer Mini */}
-        {hasMessages && getTotalSteps() > 0 && !showComputer && (
+
+        {/* Manus Computer Mini Bar */}
+        {currentTask && (
           <ManusComputerMini
-            currentStep={getCurrentStep()}
-            totalSteps={getTotalSteps()}
-            time="0:00"
-            status={messages[messages.length - 1]?.status || 'idle'}
-            onExpand={() => setShowComputer(true)}
-            onNavigate={handleComputerNavigate}
-          />
-        )}
-        
-        {/* Manus Computer Expanded */}
-        {showComputer && (
-          <ManusComputerExpanded
-            screenshot={getCurrentStep()?.screenshot}
-            currentStep={getCurrentStep()}
-            currentIndex={computerIndex}
-            totalSteps={getTotalSteps()}
-            onClose={() => setShowComputer(false)}
-            onNavigate={handleComputerNavigate}
+            currentStep={currentStepIndex}
+            totalSteps={currentTask.steps?.length || 0}
+            status={currentTask.status === 'thinking' ? 'running' : 'idle'}
+            onExpand={() => setShowManusExpanded(true)}
+            onNavigate={(dir) => {
+              if (dir === 'prev' && currentStepIndex > 1) {
+                setCurrentStepIndex(prev => prev - 1);
+              } else if (dir === 'next' && currentStepIndex < (currentTask.steps?.length || 0)) {
+                setCurrentStepIndex(prev => prev + 1);
+              }
+            }}
           />
         )}
       </main>
+
+      {/* Right Panel */}
+      <aside className="right-panel">
+        <div className="panel-tabs">
+          <button 
+            className={`panel-tab ${rightPanelTab === 'preview' ? 'active' : ''}`}
+            onClick={() => setRightPanelTab('preview')}
+          >
+            Preview
+          </button>
+          <button 
+            className={`panel-tab ${rightPanelTab === 'code' ? 'active' : ''}`}
+            onClick={() => setRightPanelTab('code')}
+          >
+            Code
+          </button>
+          <button 
+            className={`panel-tab ${rightPanelTab === 'files' ? 'active' : ''}`}
+            onClick={() => setRightPanelTab('files')}
+          >
+            Files <span className="tab-count">{files.length}</span>
+          </button>
+        </div>
+
+        <div className="panel-content">
+          {rightPanelTab === 'files' ? (
+            <FilesPanel
+              files={files}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              onFileSelect={setSelectedFile}
+              selectedFile={selectedFile?.name}
+            />
+          ) : rightPanelTab === 'preview' ? (
+            <div className="preview-placeholder">
+              <Icons.Image />
+              <p>Select an HTML file to preview</p>
+            </div>
+          ) : (
+            <div className="code-placeholder">
+              <Icons.Code />
+              <p>Select a file to view code</p>
+            </div>
+          )}
+        </div>
+
+        <div className="panel-actions">
+          <button className="panel-action-btn"><Icons.Download /></button>
+          <button className="panel-action-btn"><Icons.Expand /></button>
+          <button className="panel-action-btn"><Icons.Share /></button>
+        </div>
+      </aside>
+
+      {/* Manus Computer Expanded Modal */}
+      <ManusComputerExpanded
+        isOpen={showManusExpanded}
+        onClose={() => setShowManusExpanded(false)}
+        currentStep={currentStepIndex}
+        steps={currentTask?.steps}
+      />
     </div>
   );
 }
