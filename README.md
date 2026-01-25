@@ -1,4 +1,4 @@
-# SuperManus V3 - Professional Web Interface
+# 🚀 SuperManus V3 - Professional Web Interface
 
 **واجهة ويب احترافية لـ SuperManus V3 مستوحاة من تصميم Manus.im بنسبة تطابق 100%**
 
@@ -7,178 +7,213 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green)
 ![WebSocket](https://img.shields.io/badge/WebSocket-Real--time-orange)
 
-## ✨ Features
+---
 
-### Design & UI (100% Manus.im Match)
-- **Pixel-Perfect Design** - Exact recreation of Manus.im interface
-- **Custom SVG Icons** - Professional vector icons for all UI elements
-- **Smooth Animations** - Fade-in, slide-in, scale, bounce, and pulse animations
-- **Responsive Design** - Full mobile browser support
-- **CSS Variables** - Easy theming with dark/light mode ready
+## ✨ المميزات
 
-### Functionality
-- **Real-time WebSocket** - Live updates for task status and file creation
-- **File Management** - Preview, code view, and file list with download
-- **Live HTML Preview** - Iframe-based preview for HTML files
-- **Resizable Panels** - Draggable divider for adjusting panel widths
-- **Manus Computer Bar** - Task progress display at bottom
-- **Collapsible Steps** - Expandable task execution steps with ✓ marks
-- **Thinking Animation** - Animated dots during AI processing
-- **Quick Actions** - Research, Code, Automate, Create cards
+### 🎨 التصميم والواجهة
+- **تصميم Pixel-Perfect** - مطابق تماماً لـ Manus.im
+- **أيقونات SVG مخصصة** - 25+ أيقونة احترافية
+- **رسوم متحركة سلسة** - Fade, Slide, Scale, Bounce, Pulse
+- **دعم كامل للجوال** - Responsive Design
+- **وضع الظلام جاهز** - Dark Mode Ready
 
-### Technical
-- **React 18** - Modern React with hooks
-- **FastAPI Backend** - High-performance Python backend
-- **WebSocket** - Real-time bidirectional communication
-- **Docker Support** - Easy deployment with Docker Compose
+### 🧠 مخرجات AI محسنة
+- **Thinking Indicator** - مؤشر تفكير متحرك مع 4 مراحل
+- **Steps Timeline** - خط زمني للخطوات مع تصنيفات ملونة
+- **Markdown Rendering** - عرض Markdown كامل مع جداول وقوائم
+- **Code Syntax Highlighting** - تلوين الكود بـ One Dark theme
+- **Task Summary** - ملخص المهمة مع إحصائيات
 
-## 🚀 Getting Started
+### 📁 إدارة الملفات
+- تجميع حسب النوع (افتراضي)
+- ترتيب حسب: التاريخ، الحجم، الاسم
+- معاينة HTML مباشرة
+- عرض الكود مع تلوين
 
-### Prerequisites
+### 📱 دعم الجوال الكامل
+- قوائم جانبية متحركة (Slide-in)
+- أزرار تنقل للجوال
+- تحسينات اللمس (Touch Optimizations)
+- دعم Safe Area للأجهزة ذات النتوء
 
-- [Python 3.11+](https://www.python.org/)
-- [Node.js 18+](https://nodejs.org/)
-- [Docker](https://www.docker.com/) (optional)
+---
 
-### Installation
+## 🖥️ التثبيت على Windows
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/3rabhits/SuperManus-V3-UI.git
-   cd SuperManus-V3-UI
-   ```
+### المتطلبات
+| البرنامج | الرابط | ملاحظات |
+|----------|--------|---------|
+| Node.js | [nodejs.org](https://nodejs.org/) | اختر LTS، فعّل "Add to PATH" |
+| Python | [python.org](https://www.python.org/) | اختياري للـ Backend |
+| Git | [git-scm.com](https://git-scm.com/) | اختياري |
 
-2. **Setup Environment:**
-   ```bash
-   cp .env.example .env
-   ```
+### 🚀 التثبيت السريع (3 خطوات)
 
-3. **Install dependencies:**
-   ```bash
-   # Backend
-   cd backend && pip install -r requirements.txt && cd ..
+**1. استخراج الملفات:**
+```
+انقر بزر الماوس الأيمن على SuperManus_V3_Complete.zip
+اختر "Extract All..." أو "استخراج الكل..."
+```
 
-   # Frontend
-   cd frontend && npm install && cd ..
-   ```
+**2. تثبيت التبعيات:**
+```
+انقر مرتين على: install.bat
+```
 
-### Running the Application
+**3. تشغيل التطبيق:**
+```
+انقر مرتين على: start.bat
+```
 
-**Option 1: Using start scripts**
+**4. افتح المتصفح:** http://localhost:3000
+
+### 📝 التثبيت اليدوي
+
+```cmd
+:: افتح Command Prompt وانتقل لمجلد المشروع
+cd C:\path\to\SuperManus-V3-UI
+
+:: تثبيت التبعيات
+cd frontend
+npm install
+
+:: تشغيل التطبيق
+npm start
+```
+
+---
+
+## 🐧 التثبيت على Linux/Mac
 
 ```bash
-# Linux/macOS
-chmod +x start.sh && ./start.sh
+# استنساخ المستودع
+git clone https://github.com/3rabhits/SuperManus-V3-UI.git
+cd SuperManus-V3-UI
 
-# Windows
-start.bat
+# تثبيت التبعيات
+cd frontend && npm install
+
+# تشغيل التطبيق
+npm start
 ```
 
-**Option 2: Using Docker Compose**
-```bash
-docker-compose up --build
-```
+---
 
-**Option 3: Manual**
-```bash
-# Backend (Terminal 1)
-cd backend && uvicorn main:app --host 0.0.0.0 --port 8000
+## 🛠️ سكريبتات Windows
 
-# Frontend (Terminal 2)
-cd frontend && PORT=3003 npm start
-```
+| الملف | الوظيفة | الاستخدام |
+|-------|---------|----------|
+| `install.bat` | تثبيت جميع التبعيات | مرة واحدة فقط |
+| `start.bat` | تشغيل Frontend + Backend | للتشغيل اليومي |
+| `build.bat` | بناء نسخة الإنتاج | للنشر |
 
-### Accessing the Application
+---
 
-| Service | URL |
-|---------|-----|
-| Frontend | http://localhost:3003 |
-| Backend API | http://localhost:8000 |
-| API Docs | http://localhost:8000/docs |
-
-## 📁 Project Structure
+## 📁 هيكل المشروع
 
 ```
-SuperManus_UI/
-├── backend/
-│   ├── main.py             # FastAPI server with WebSocket
-│   ├── config.py           # Configuration
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── App.js          # Main React component
-│   │   ├── Icons.js        # Custom SVG icons
-│   │   └── index.css       # Manus.im-inspired styles
+SuperManus-V3-UI/
+├── frontend/                 # React Frontend
 │   ├── public/
-│   └── build/              # Production build
-├── docker-compose.yml
-├── Dockerfile.backend
-├── Dockerfile.frontend
-├── start.sh / start.bat
+│   │   └── index.html
+│   ├── src/
+│   │   ├── App.js           # المكون الرئيسي (1500+ سطر)
+│   │   ├── index.css        # الأنماط (5000+ سطر)
+│   │   └── index.js
+│   ├── build/               # نسخة الإنتاج
+│   └── package.json
+├── backend/                  # Python Backend
+│   ├── main.py              # FastAPI + WebSocket
+│   ├── config.py
+│   └── requirements.txt
+├── start.bat                # تشغيل Windows
+├── install.bat              # تثبيت Windows
+├── build.bat                # بناء للإنتاج
+├── INSTALL_WINDOWS.md       # دليل Windows التفصيلي
 └── README.md
 ```
 
-## 🎨 Key Components
+---
 
-| Component | Description |
-|-----------|-------------|
-| Sidebar | Navigation and task list |
-| TopBar | Connection status and actions |
-| ChatInput | Message input with emoji/voice |
-| QuickActions | Research, Code, Automate, Create |
-| AgentResponse | AI response with collapsible steps |
-| FilesPanel | File list, code view, preview |
-| ManusComputerMini | Bottom progress bar |
-| ManusComputerExpanded | Full-screen task viewer |
+## 🔧 حل المشاكل الشائعة
 
-## 🔌 API Endpoints
+### `'npm' is not recognized`
+```cmd
+:: أعد تشغيل Command Prompt بعد تثبيت Node.js
+:: أو أعد تشغيل الكمبيوتر
+```
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/ws/{session_id}` | WebSocket | Real-time communication |
-| `/api/files` | GET | List generated files |
-| `/files/{filename}` | GET | Serve file for preview |
-| `/download/{filename}` | GET | Download file |
-| `/health` | GET | Health check |
+### `Port 3000 is already in use`
+```cmd
+set PORT=3001 && npm start
+```
 
-## 📡 WebSocket Messages
+### `npm install` بطيء
+```cmd
+npm config set registry https://registry.npmmirror.com
+npm install
+```
+
+---
+
+## 🌐 النشر
+
+### Vercel (مجاني)
+1. اربط GitHub بـ [Vercel](https://vercel.com)
+2. استورد المستودع
+3. Root Directory: `frontend`
+4. انقر Deploy
+
+### Netlify (مجاني)
+1. شغّل `build.bat`
+2. اسحب مجلد `frontend/build` إلى [Netlify](https://netlify.com)
+
+---
+
+## 🎬 الرسوم المتحركة
+
+| الاسم | الاستخدام |
+|-------|----------|
+| `fadeIn` / `fadeInUp` | ظهور العناصر |
+| `slideInFromBottom` | انتقالات اللوحات |
+| `scaleIn` | النوافذ المنبثقة |
+| `pulse` / `bounce` | مؤشرات الحالة |
+| `shimmer` | هياكل التحميل |
+| `spin` | دوائر التحميل |
+
+---
+
+## 📡 WebSocket API
 
 **Client → Server:**
 ```json
 {"type": "chat", "prompt": "Your message"}
-{"type": "get_file", "filename": "example.html"}
 ```
 
 **Server → Client:**
 ```json
 {"type": "status", "data": {"status": "running"}}
-{"type": "step", "data": {"id": 1, "title": "Analyzing", "status": "running"}}
+{"type": "step", "data": {"id": 1, "title": "Analyzing", "status": "completed"}}
 {"type": "response", "data": {"message": "...", "status": "completed"}}
-{"type": "files", "data": {"files": [...]}}
 ```
-
-## 🎬 Animations
-
-The UI includes smooth animations matching Manus.im:
-- `fadeIn` / `fadeInUp` / `fadeInDown` - Element appearance
-- `slideInFromBottom` / `slideInFromRight` - Panel transitions
-- `scaleIn` - Modal and card animations
-- `pulse` / `bounce` - Status indicators
-- `shimmer` - Loading skeletons
-- `spin` - Loading spinners
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🙏 Acknowledgments
-
-- Design inspired by [Manus.im](https://manus.im)
-- Built with React and FastAPI
-- Custom SVG icons
 
 ---
 
-**Live Demo:** [SuperManus V3 UI](https://3003-i51decah5uga692w0g4xv-6c75ad8c.sg1.manus.computer)
+## 📄 الترخيص
 
-**GitHub:** [https://github.com/3rabhits/SuperManus-V3-UI](https://github.com/3rabhits/SuperManus-V3-UI)
+MIT License - استخدم بحرية!
+
+---
+
+## 🔗 الروابط
+
+| الوصف | الرابط |
+|-------|--------|
+| **GitHub** | https://github.com/3rabhits/SuperManus-V3-UI |
+| **Live Demo** | https://3003-i51decah5uga692w0g4xv-6c75ad8c.sg1.manus.computer |
+| **Manus.im** | https://manus.im (التصميم الأصلي) |
+
+---
+
+**صنع بـ ❤️ باستخدام React و FastAPI**
