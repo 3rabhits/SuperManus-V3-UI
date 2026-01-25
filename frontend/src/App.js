@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import './index.css';
 
 // Icons - Manus.im Style SVG Icons
@@ -114,7 +114,6 @@ const Icons = {
       <path d="M3 4L6 7L3 10M7 10H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
-  Thinking: () => <span className="thinking-dot">●</span>,
   Computer: () => (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
       <rect x="2" y="3" width="16" height="11" rx="2" stroke="currentColor" strokeWidth="1.5"/>
@@ -161,6 +160,89 @@ const Icons = {
       <path d="M9 2L10.5 6.5L15 8L10.5 9.5L9 14L7.5 9.5L3 8L7.5 6.5L9 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
     </svg>
   ),
+  // New Icons for enhanced features
+  SortAsc: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M4 6L8 2L12 6M4 10H12M4 14H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  SortDesc: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M4 10L8 14L12 10M4 6H12M4 2H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Clock: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M8 4V8L10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  FileType: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 2H10L13 5V14H3V2Z" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M10 2V5H13" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M5 9H11M5 11H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  SizeIcon: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M5 11V8M8 11V5M11 11V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  Brain: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M9 2C6.5 2 5 3.5 5 5.5C5 6.5 5.5 7.5 6 8C4.5 8.5 3 10 3 12C3 14 4.5 16 7 16H11C13.5 16 15 14 15 12C15 10 13.5 8.5 12 8C12.5 7.5 13 6.5 13 5.5C13 3.5 11.5 2 9 2Z" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M9 8V12M7 10H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  Analyze: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M9 5V9L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  Execute: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M6 4L14 9L6 14V4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Review: () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M6 9L8 11L12 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Thinking: () => <span className="thinking-dot">●</span>,
+};
+
+// Sort options configuration
+const SORT_OPTIONS = [
+  { id: 'type', label: 'Type', icon: Icons.FileType },
+  { id: 'date', label: 'Last Modified', icon: Icons.Clock },
+  { id: 'size', label: 'Size', icon: Icons.SizeIcon },
+  { id: 'name', label: 'Name', icon: Icons.SortAsc },
+];
+
+// File type priority for sorting
+const FILE_TYPE_PRIORITY = {
+  'html': 1,
+  'css': 2,
+  'js': 3,
+  'jsx': 4,
+  'ts': 5,
+  'tsx': 6,
+  'json': 7,
+  'md': 8,
+  'py': 9,
+  'txt': 10,
+  'zip': 11,
+  'png': 12,
+  'jpg': 13,
+  'jpeg': 14,
+  'gif': 15,
+  'svg': 16,
+  'pdf': 17,
 };
 
 // Sidebar Component
@@ -263,9 +345,6 @@ function ChatInput({ onSend, disabled }) {
     if (message.trim() && !disabled) {
       onSend(message);
       setMessage('');
-      if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
-      }
     }
   };
 
@@ -276,32 +355,23 @@ function ChatInput({ onSend, disabled }) {
     }
   };
 
-  const handleInput = (e) => {
-    setMessage(e.target.value);
-    // Auto-resize textarea
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
-    }
-  };
-
   return (
     <form className="chat-input-form" onSubmit={handleSubmit}>
-      <div className="chat-input-container">
+      <div className="input-container">
         <textarea
           ref={textareaRef}
           value={message}
-          onChange={handleInput}
+          onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="What can I do for you?"
           disabled={disabled}
           rows={1}
         />
         <div className="input-actions">
-          <button type="button" className="input-action-btn" title="Add emoji">
+          <button type="button" className="input-action" title="Add emoji">
             <Icons.Emoji />
           </button>
-          <button type="button" className="input-action-btn" title="Voice input">
+          <button type="button" className="input-action" title="Voice input">
             <Icons.Mic />
           </button>
           <button 
@@ -313,9 +383,7 @@ function ChatInput({ onSend, disabled }) {
           </button>
         </div>
       </div>
-      <div className="input-footer">
-        <span className="footer-hint">Press Enter to send, Shift+Enter for new line</span>
-      </div>
+      <div className="input-hint">Press Enter to send, Shift+Enter for new line</div>
     </form>
   );
 }
@@ -323,10 +391,10 @@ function ChatInput({ onSend, disabled }) {
 // Quick Actions Component
 function QuickActions({ onAction }) {
   const actions = [
-    { icon: <Icons.Globe />, label: 'Research', desc: 'Search and analyze information' },
-    { icon: <Icons.Code />, label: 'Code', desc: 'Write and debug code' },
-    { icon: <Icons.Lightning />, label: 'Automate', desc: 'Create workflows' },
-    { icon: <Icons.Sparkle />, label: 'Create', desc: 'Generate content' },
+    { icon: Icons.Globe, label: 'Research', description: 'Search and analyze information', prompt: 'Research' },
+    { icon: Icons.Code, label: 'Code', description: 'Write and debug code', prompt: 'Code' },
+    { icon: Icons.Lightning, label: 'Automate', description: 'Create workflows', prompt: 'Automate' },
+    { icon: Icons.Sparkle, label: 'Create', description: 'Generate content', prompt: 'Create' },
   ];
 
   return (
@@ -335,11 +403,12 @@ function QuickActions({ onAction }) {
         <button 
           key={index}
           className="quick-action-card"
-          onClick={() => onAction(action.label)}
+          onClick={() => onAction(action.prompt)}
+          style={{ animationDelay: `${index * 0.1}s` }}
         >
-          <span className="action-icon">{action.icon}</span>
+          <action.icon />
           <span className="action-label">{action.label}</span>
-          <span className="action-desc">{action.desc}</span>
+          <span className="action-description">{action.description}</span>
         </button>
       ))}
     </div>
@@ -358,59 +427,192 @@ function UserMessage({ message, time }) {
   );
 }
 
-// Agent Response Component
-function AgentResponse({ response, steps, status, expandedSteps, onStepToggle }) {
+// Enhanced Thinking Indicator Component
+function ThinkingIndicator({ phase, progress, details }) {
+  const phases = [
+    { id: 'understanding', label: 'Understanding request', icon: Icons.Brain },
+    { id: 'planning', label: 'Planning approach', icon: Icons.Analyze },
+    { id: 'executing', label: 'Executing task', icon: Icons.Execute },
+    { id: 'reviewing', label: 'Reviewing output', icon: Icons.Review },
+  ];
+
+  const currentPhaseIndex = phases.findIndex(p => p.id === phase) || 0;
+
+  return (
+    <div className="thinking-indicator-enhanced">
+      <div className="thinking-header">
+        <div className="thinking-animation">
+          <div className="thinking-ring">
+            <div className="ring-segment"></div>
+            <div className="ring-segment"></div>
+            <div className="ring-segment"></div>
+          </div>
+          <Icons.Brain />
+        </div>
+        <div className="thinking-title">
+          <span className="title-text">Thinking</span>
+          <span className="thinking-dots-inline">
+            <span></span><span></span><span></span>
+          </span>
+        </div>
+      </div>
+      
+      <div className="thinking-phases">
+        {phases.map((p, index) => (
+          <div 
+            key={p.id}
+            className={`thinking-phase ${index < currentPhaseIndex ? 'completed' : ''} ${index === currentPhaseIndex ? 'active' : ''} ${index > currentPhaseIndex ? 'pending' : ''}`}
+          >
+            <div className="phase-icon">
+              {index < currentPhaseIndex ? (
+                <Icons.Check />
+              ) : index === currentPhaseIndex ? (
+                <span className="phase-spinner"></span>
+              ) : (
+                <p.icon />
+              )}
+            </div>
+            <span className="phase-label">{p.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {details && (
+        <div className="thinking-details">
+          <div className="detail-item">
+            <Icons.Terminal />
+            <span>{details}</span>
+          </div>
+        </div>
+      )}
+
+      {progress !== undefined && (
+        <div className="thinking-progress">
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+          </div>
+          <span className="progress-text">{progress}%</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Enhanced Step Item Component
+function StepItem({ step, index, isExpanded, onToggle, isLast }) {
+  const getStepIcon = () => {
+    if (step.status === 'completed') return <Icons.Check />;
+    if (step.status === 'running') return <span className="step-spinner"></span>;
+    if (step.status === 'error') return <span className="step-error">!</span>;
+    return <span className="step-number">{index + 1}</span>;
+  };
+
+  const getStepCategory = () => {
+    const title = (step.title || step.action || '').toLowerCase();
+    if (title.includes('analyz') || title.includes('understand') || title.includes('read')) return 'analyze';
+    if (title.includes('creat') || title.includes('writ') || title.includes('generat') || title.includes('build')) return 'create';
+    if (title.includes('execut') || title.includes('run') || title.includes('process')) return 'execute';
+    if (title.includes('review') || title.includes('check') || title.includes('verify')) return 'review';
+    return 'default';
+  };
+
+  return (
+    <div 
+      className={`step-item-enhanced ${step.status || 'pending'} ${isExpanded ? 'expanded' : ''} category-${getStepCategory()}`}
+    >
+      <div className="step-connector">
+        <div className={`connector-line ${step.status === 'completed' ? 'completed' : ''}`}></div>
+        {!isLast && <div className="connector-line-bottom"></div>}
+      </div>
+      
+      <div className="step-content">
+        <div className="step-header" onClick={onToggle}>
+          <div className={`step-icon ${step.status || 'pending'}`}>
+            {getStepIcon()}
+          </div>
+          <div className="step-info">
+            <span className="step-title">{step.title || step.action}</span>
+            {step.duration && (
+              <span className="step-duration">{step.duration}</span>
+            )}
+          </div>
+          <span className="step-toggle">
+            {isExpanded ? <Icons.ChevronUp /> : <Icons.ChevronDown />}
+          </span>
+        </div>
+        
+        {isExpanded && (
+          <div className="step-details-enhanced">
+            {step.description && (
+              <p className="step-description">{step.description}</p>
+            )}
+            {step.details && (
+              <div className="step-code-block">
+                <pre>{typeof step.details === 'object' ? JSON.stringify(step.details, null, 2) : step.details}</pre>
+              </div>
+            )}
+            {step.output && (
+              <div className="step-output">
+                <span className="output-label">Output:</span>
+                <pre>{step.output}</pre>
+              </div>
+            )}
+            {step.files && step.files.length > 0 && (
+              <div className="step-files">
+                <span className="files-label">Files created:</span>
+                <div className="files-list-mini">
+                  {step.files.map((file, i) => (
+                    <span key={i} className="file-tag">{file}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Enhanced Agent Response Component
+function AgentResponse({ response, steps, status, thinkingPhase, thinkingDetails, expandedSteps, onStepToggle }) {
+  const completedSteps = steps?.filter(s => s.status === 'completed').length || 0;
+  const totalSteps = steps?.length || 0;
+
   return (
     <div className="message agent-message">
       {status === 'thinking' && (
-        <div className="thinking-indicator">
-          <div className="thinking-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <span className="thinking-text">Thinking...</span>
-        </div>
+        <ThinkingIndicator 
+          phase={thinkingPhase || 'understanding'} 
+          details={thinkingDetails}
+          progress={totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : undefined}
+        />
       )}
       
       {steps && steps.length > 0 && (
-        <div className="agent-steps">
-          {steps.map((step, index) => (
-            <div 
-              key={step.id || index}
-              className={`step-item ${step.status || 'pending'} ${expandedSteps.includes(index) ? 'expanded' : ''}`}
-            >
-              <div 
-                className="step-header"
-                onClick={() => onStepToggle(index)}
-              >
-                <span className="step-icon">
-                  {step.status === 'completed' ? (
-                    <Icons.Check />
-                  ) : step.status === 'running' ? (
-                    <span className="step-spinner"></span>
-                  ) : (
-                    <span className="step-number">{index + 1}</span>
-                  )}
-                </span>
-                <span className="step-title">{step.title || step.action}</span>
-                <span className="step-toggle">
-                  {expandedSteps.includes(index) ? <Icons.ChevronUp /> : <Icons.ChevronDown />}
-                </span>
-              </div>
-              {expandedSteps.includes(index) && step.details && (
-                <div className="step-details">
-                  <pre>{typeof step.details === 'object' ? JSON.stringify(step.details, null, 2) : step.details}</pre>
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="agent-steps-enhanced">
+          <div className="steps-header">
+            <span className="steps-title">Task Progress</span>
+            <span className="steps-count">{completedSteps}/{totalSteps} steps</span>
+          </div>
+          <div className="steps-timeline">
+            {steps.map((step, index) => (
+              <StepItem
+                key={step.id || index}
+                step={step}
+                index={index}
+                isExpanded={expandedSteps.includes(index)}
+                onToggle={() => onStepToggle(index)}
+                isLast={index === steps.length - 1}
+              />
+            ))}
+          </div>
         </div>
       )}
       
       {response && status !== 'thinking' && (
         <div className="agent-response-content">
-          <p>{response}</p>
+          <div className="response-text">{response}</div>
         </div>
       )}
     </div>
@@ -530,9 +732,67 @@ function getFileIcon(filename) {
   return iconMap[ext] || '📄';
 }
 
-// Files Panel Component
+// Sort Dropdown Component
+function SortDropdown({ sortBy, sortOrder, onSortChange }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const currentOption = SORT_OPTIONS.find(o => o.id === sortBy);
+
+  return (
+    <div className="sort-dropdown" ref={dropdownRef}>
+      <button 
+        className={`sort-trigger ${isOpen ? 'open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <currentOption.icon />
+        <span>{currentOption.label}</span>
+        <Icons.ChevronDown />
+      </button>
+      
+      {isOpen && (
+        <div className="sort-menu">
+          <div className="sort-menu-header">Sort by</div>
+          {SORT_OPTIONS.map(option => (
+            <button
+              key={option.id}
+              className={`sort-option ${sortBy === option.id ? 'active' : ''}`}
+              onClick={() => {
+                onSortChange(option.id, sortBy === option.id ? (sortOrder === 'asc' ? 'desc' : 'asc') : 'asc');
+                setIsOpen(false);
+              }}
+            >
+              <option.icon />
+              <span>{option.label}</span>
+              {sortBy === option.id && (
+                <span className="sort-direction">
+                  {sortOrder === 'asc' ? <Icons.SortAsc /> : <Icons.SortDesc />}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Enhanced Files Panel Component
 function FilesPanel({ files, selectedFile, onSelectFile, onDownload, activeTab, onTabChange, previewUrl, width, onResize }) {
   const [isResizing, setIsResizing] = useState(false);
+  const [sortBy, setSortBy] = useState('type');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [prettyPrint, setPrettyPrint] = useState(false);
   const panelRef = useRef(null);
 
   const handleMouseDown = useCallback((e) => {
@@ -563,6 +823,64 @@ function FilesPanel({ files, selectedFile, onSelectFile, onDownload, activeTab, 
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isResizing, onResize]);
+
+  // Sort files
+  const sortedFiles = useMemo(() => {
+    const sorted = [...files].sort((a, b) => {
+      let comparison = 0;
+      
+      switch (sortBy) {
+        case 'type':
+          const extA = a.name.split('.').pop().toLowerCase();
+          const extB = b.name.split('.').pop().toLowerCase();
+          const priorityA = FILE_TYPE_PRIORITY[extA] || 99;
+          const priorityB = FILE_TYPE_PRIORITY[extB] || 99;
+          comparison = priorityA - priorityB;
+          break;
+        case 'date':
+          const dateA = a.modified ? new Date(a.modified).getTime() : 0;
+          const dateB = b.modified ? new Date(b.modified).getTime() : 0;
+          comparison = dateB - dateA; // Newest first by default
+          break;
+        case 'size':
+          const sizeA = typeof a.size === 'number' ? a.size : parseInt(a.size) || 0;
+          const sizeB = typeof b.size === 'number' ? b.size : parseInt(b.size) || 0;
+          comparison = sizeB - sizeA; // Largest first by default
+          break;
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        default:
+          comparison = 0;
+      }
+      
+      return sortOrder === 'desc' ? -comparison : comparison;
+    });
+    
+    return sorted;
+  }, [files, sortBy, sortOrder]);
+
+  // Group files by type when sorting by type
+  const groupedFiles = useMemo(() => {
+    if (sortBy !== 'type') return null;
+    
+    const groups = {};
+    sortedFiles.forEach(file => {
+      const ext = file.name.split('.').pop().toLowerCase();
+      const groupName = getFileGroupName(ext);
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(file);
+    });
+    
+    return groups;
+  }, [sortedFiles, sortBy]);
+
+  const handleSortChange = (newSortBy, newSortOrder) => {
+    setSortBy(newSortBy);
+    setSortOrder(newSortOrder);
+  };
 
   return (
     <div 
@@ -628,8 +946,20 @@ function FilesPanel({ files, selectedFile, onSelectFile, onDownload, activeTab, 
           <div className="code-container">
             {selectedFile ? (
               <>
-                <div className="code-filename">{selectedFile.name}</div>
-                <pre className="code-content">{selectedFile.content || 'Loading...'}</pre>
+                <div className="code-header">
+                  <span className="code-filename">{selectedFile.name}</span>
+                  <label className="pretty-print-toggle">
+                    <input 
+                      type="checkbox" 
+                      checked={prettyPrint} 
+                      onChange={(e) => setPrettyPrint(e.target.checked)}
+                    />
+                    <span>Pretty-print</span>
+                  </label>
+                </div>
+                <pre className={`code-content ${prettyPrint ? 'pretty' : ''}`}>
+                  {selectedFile.content || '{"detail":"Not Found"}'}
+                </pre>
               </>
             ) : (
               <div className="code-empty">
@@ -641,32 +971,118 @@ function FilesPanel({ files, selectedFile, onSelectFile, onDownload, activeTab, 
         )}
 
         {activeTab === 'files' && (
-          <div className="files-list">
-            {files.map((file, index) => (
-              <div 
-                key={index}
-                className={`file-item ${selectedFile?.name === file.name ? 'selected' : ''}`}
-                onClick={() => onSelectFile(file)}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <span className="file-icon">{getFileIcon(file.name)}</span>
-                <div className="file-info">
-                  <span className="file-name">{file.name}</span>
-                  <span className="file-size">{file.size}</span>
-                </div>
-                <button 
-                  className="file-download"
-                  onClick={(e) => { e.stopPropagation(); onDownload(file); }}
-                >
-                  <Icons.Download />
-                </button>
-              </div>
-            ))}
+          <div className="files-container">
+            <div className="files-toolbar">
+              <SortDropdown 
+                sortBy={sortBy} 
+                sortOrder={sortOrder} 
+                onSortChange={handleSortChange}
+              />
+            </div>
+            
+            <div className="files-list">
+              {sortBy === 'type' && groupedFiles ? (
+                Object.entries(groupedFiles).map(([groupName, groupFiles]) => (
+                  <div key={groupName} className="file-group">
+                    <div className="file-group-header">
+                      <span className="group-name">{groupName}</span>
+                      <span className="group-count">{groupFiles.length}</span>
+                    </div>
+                    {groupFiles.map((file, index) => (
+                      <FileItem
+                        key={file.name + index}
+                        file={file}
+                        isSelected={selectedFile?.name === file.name}
+                        onSelect={onSelectFile}
+                        onDownload={onDownload}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+                ))
+              ) : (
+                sortedFiles.map((file, index) => (
+                  <FileItem
+                    key={file.name + index}
+                    file={file}
+                    isSelected={selectedFile?.name === file.name}
+                    onSelect={onSelectFile}
+                    onDownload={onDownload}
+                    index={index}
+                  />
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
     </div>
   );
+}
+
+// File Item Component
+function FileItem({ file, isSelected, onSelect, onDownload, index }) {
+  return (
+    <div 
+      className={`file-item ${isSelected ? 'selected' : ''}`}
+      onClick={() => onSelect(file)}
+      style={{ animationDelay: `${index * 0.03}s` }}
+    >
+      <span className="file-icon">{getFileIcon(file.name)}</span>
+      <div className="file-info">
+        <span className="file-name">{file.name}</span>
+        <span className="file-size">{formatFileSize(file.size)}</span>
+      </div>
+      <button 
+        className="file-download"
+        onClick={(e) => { e.stopPropagation(); onDownload(file); }}
+        title="Download file"
+      >
+        <Icons.Download />
+      </button>
+    </div>
+  );
+}
+
+// Helper function to get file group name
+function getFileGroupName(ext) {
+  const groups = {
+    'html': 'Web Pages',
+    'css': 'Stylesheets',
+    'js': 'JavaScript',
+    'jsx': 'React Components',
+    'ts': 'TypeScript',
+    'tsx': 'TypeScript React',
+    'json': 'Data Files',
+    'md': 'Documentation',
+    'py': 'Python',
+    'png': 'Images',
+    'jpg': 'Images',
+    'jpeg': 'Images',
+    'gif': 'Images',
+    'svg': 'Vector Graphics',
+    'pdf': 'Documents',
+    'txt': 'Text Files',
+    'zip': 'Archives',
+  };
+  return groups[ext] || 'Other Files';
+}
+
+// Helper function to format file size
+function formatFileSize(size) {
+  if (typeof size === 'string') return size;
+  if (!size) return '0 B';
+  
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let unitIndex = 0;
+  let fileSize = size;
+  
+  while (fileSize >= 1024 && unitIndex < units.length - 1) {
+    fileSize /= 1024;
+    unitIndex++;
+  }
+  
+  return `${fileSize.toFixed(unitIndex > 0 ? 1 : 0)} ${units[unitIndex]}`;
 }
 
 // Main App Component
@@ -683,6 +1099,8 @@ function App() {
   const [showComputer, setShowComputer] = useState(false);
   const [computerIndex, setComputerIndex] = useState(0);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [thinkingPhase, setThinkingPhase] = useState('understanding');
+  const [thinkingDetails, setThinkingDetails] = useState('');
   
   const wsRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -742,6 +1160,11 @@ function App() {
           });
         }
         break;
+      
+      case 'thinking':
+        setThinkingPhase(data.data.phase || 'understanding');
+        setThinkingDetails(data.data.details || '');
+        break;
         
       case 'step':
         setMessages(prev => {
@@ -758,6 +1181,10 @@ function App() {
           }
           return updated;
         });
+        // Update thinking phase based on step
+        if (data.data.status === 'running') {
+          setThinkingPhase('executing');
+        }
         break;
         
       case 'step_update':
@@ -775,6 +1202,7 @@ function App() {
         break;
         
       case 'response':
+        setThinkingPhase('reviewing');
         setMessages(prev => {
           const updated = [...prev];
           const lastMsg = updated[updated.length - 1];
@@ -830,6 +1258,10 @@ function App() {
     
     const time = new Date().toLocaleTimeString();
     
+    // Reset thinking state
+    setThinkingPhase('understanding');
+    setThinkingDetails('');
+    
     setMessages(prev => [...prev, {
       type: 'user',
       message,
@@ -838,7 +1270,7 @@ function App() {
     
     setMessages(prev => [...prev, {
       type: 'agent',
-      response: `Got it! I'll help you with: "${message}"`,
+      response: '',
       steps: [],
       status: 'thinking'
     }]);
@@ -907,6 +1339,8 @@ function App() {
     setMessages([]);
     setCurrentTaskIndex(-1);
     setExpandedSteps([]);
+    setThinkingPhase('understanding');
+    setThinkingDetails('');
   };
 
   const handleSelectTask = (index) => {
@@ -982,6 +1416,8 @@ function App() {
                         response={msg.response}
                         steps={msg.steps}
                         status={msg.status}
+                        thinkingPhase={thinkingPhase}
+                        thinkingDetails={thinkingDetails}
                         expandedSteps={expandedSteps}
                         onStepToggle={handleStepToggle}
                       />
