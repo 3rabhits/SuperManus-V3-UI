@@ -244,6 +244,22 @@ const Icons = {
     </svg>
   ),
   Thinking: () => <span className="thinking-dot">●</span>,
+  Menu: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  Close: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  FilesIcon: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <rect x="4" y="2" width="12" height="16" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M7 6H13M7 10H13M7 14H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
 };
 
 // Sort options configuration
@@ -1036,6 +1052,8 @@ function App() {
   const [sortBy, setSortBy] = useState('type');
   const [showManusExpanded, setShowManusExpanded] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(1);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileFilesOpen, setMobileFilesOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -1219,8 +1237,34 @@ Would you like me to:
 
   return (
     <div className="app">
+      {/* Mobile Menu Button */}
+      <button 
+        className="mobile-menu-btn"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+      >
+        {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
+      </button>
+
+      {/* Mobile Files Button */}
+      <button 
+        className="mobile-files-btn"
+        onClick={() => setMobileFilesOpen(!mobileFilesOpen)}
+      >
+        <Icons.FilesIcon />
+        {files.length > 0 && <span className="files-count">{files.length}</span>}
+      </button>
+
+      {/* Mobile Overlay */}
+      <div 
+        className={`mobile-overlay ${mobileMenuOpen || mobileFilesOpen ? 'active' : ''}`}
+        onClick={() => {
+          setMobileMenuOpen(false);
+          setMobileFilesOpen(false);
+        }}
+      ></div>
+
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header">
           <div className="logo">
             <Icons.Logo />
@@ -1420,7 +1464,7 @@ Would you like me to:
       </main>
 
       {/* Right Panel */}
-      <aside className="right-panel">
+      <aside className={`right-panel files-panel ${mobileFilesOpen ? 'mobile-open' : ''}`}>
         <div className="panel-tabs">
           <button 
             className={`panel-tab ${rightPanelTab === 'preview' ? 'active' : ''}`}
