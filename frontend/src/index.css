@@ -5557,3 +5557,660 @@ textarea:focus-visible {
     padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
   }
 }
+
+
+/* ============================================================================
+   MANUS.IM MOBILE EXACT MATCH - Dark Theme Mobile Design
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  /* Force dark theme on mobile */
+  .app {
+    background: #1a1a1a !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+  }
+  
+  /* Hide desktop elements */
+  .sidebar,
+  .files-panel,
+  .header-left,
+  .header-right,
+  .connection-status,
+  .quick-actions,
+  .connect-tools {
+    display: none !important;
+  }
+  
+  /* Mobile Header - Manus.im Style */
+  .header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 56px !important;
+    background: #1a1a1a !important;
+    border-bottom: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 16px !important;
+    z-index: 100 !important;
+  }
+  
+  .header h1 {
+    display: none !important;
+  }
+  
+  /* Mobile Menu Button - Back Arrow Style */
+  .mobile-menu-btn {
+    position: static !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .mobile-menu-btn svg {
+    color: white !important;
+    stroke: white !important;
+  }
+  
+  /* Mobile Header Title */
+  .mobile-header-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+  }
+  
+  .mobile-header-title svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  /* Mobile Credits Badge */
+  .mobile-credits {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: #2a2a2a !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+  
+  .mobile-credits svg {
+    width: 16px !important;
+    height: 16px !important;
+    color: #a78bfa !important;
+  }
+  
+  /* Hide Files Button on Mobile */
+  .mobile-files-btn {
+    display: none !important;
+  }
+  
+  /* Main Content - Dark Theme */
+  .main-content {
+    background: #1a1a1a !important;
+    padding: 80px 20px 140px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: calc(100vh - 220px) !important;
+    min-height: calc(100dvh - 220px) !important;
+  }
+  
+  /* Welcome Screen - Manus.im Style */
+  .welcome-screen {
+    text-align: center !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  
+  .welcome-screen h1 {
+    color: white !important;
+    font-size: 28px !important;
+    font-weight: 400 !important;
+    margin-bottom: 20px !important;
+    letter-spacing: -0.5px !important;
+  }
+  
+  .welcome-screen p {
+    display: none !important;
+  }
+  
+  /* Explore Button - Manus.im Style */
+  .explore-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: transparent !important;
+    border: 1px solid #444 !important;
+    color: #999 !important;
+    padding: 10px 20px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .explore-button:hover {
+    border-color: #666 !important;
+    color: #ccc !important;
+  }
+  
+  .explore-button .close-icon {
+    width: 16px !important;
+    height: 16px !important;
+    opacity: 0.6 !important;
+  }
+  
+  /* Hide Quick Actions on Mobile */
+  .quick-actions {
+    display: none !important;
+  }
+  
+  /* Input Container - Manus.im Dark Style */
+  .input-container {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #1a1a1a !important;
+    padding: 12px 16px !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    border-top: none !important;
+    z-index: 100 !important;
+  }
+  
+  .input-box {
+    background: #2a2a2a !important;
+    border: none !important;
+    border-radius: 24px !important;
+    padding: 14px 20px !important;
+  }
+  
+  .input-box textarea {
+    background: transparent !important;
+    color: white !important;
+    font-size: 16px !important;
+    min-height: 24px !important;
+  }
+  
+  .input-box textarea::placeholder {
+    color: #666 !important;
+  }
+  
+  /* Input Actions - Manus.im Style */
+  .input-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-top: 12px !important;
+    padding: 0 4px !important;
+  }
+  
+  .input-actions-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  .input-actions-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  .input-actions button {
+    width: 44px !important;
+    height: 44px !important;
+    background: #333 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .input-actions button:hover {
+    background: #444 !important;
+    color: white !important;
+  }
+  
+  .input-actions button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Gmail Badge */
+  .gmail-badge {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    background: #333 !important;
+    padding: 8px 12px !important;
+    border-radius: 20px !important;
+    color: #999 !important;
+    font-size: 13px !important;
+  }
+  
+  .gmail-badge img {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Send Button - Active State */
+  .send-button {
+    background: #444 !important;
+    color: white !important;
+  }
+  
+  .send-button.active {
+    background: white !important;
+    color: #1a1a1a !important;
+  }
+  
+  /* Mobile Overlay - Dark */
+  .mobile-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+  }
+  
+  /* Sidebar - Dark Theme */
+  .sidebar.mobile-open {
+    display: flex !important;
+    background: #1a1a1a !important;
+    border-right: 1px solid #333 !important;
+  }
+  
+  .sidebar .logo span,
+  .sidebar .sidebar-btn span,
+  .sidebar .task-item {
+    color: white !important;
+  }
+  
+  .sidebar .sidebar-btn {
+    background: transparent !important;
+    border-color: #333 !important;
+  }
+  
+  .sidebar .sidebar-btn:hover {
+    background: #2a2a2a !important;
+  }
+  
+  /* Messages Area - Dark Theme */
+  .messages-area {
+    background: #1a1a1a !important;
+  }
+  
+  .user-message {
+    background: #2a2a2a !important;
+    color: white !important;
+  }
+  
+  .agent-message {
+    background: #222 !important;
+    color: white !important;
+  }
+  
+  /* Response Content - Dark Theme */
+  .response-content {
+    background: #222 !important;
+    color: white !important;
+    border-color: #333 !important;
+  }
+  
+  .response-content h1,
+  .response-content h2,
+  .response-content h3,
+  .response-content h4,
+  .response-content p,
+  .response-content li {
+    color: white !important;
+  }
+  
+  /* Thinking Indicator - Dark Theme */
+  .thinking-indicator-enhanced,
+  .thinking-card {
+    background: #222 !important;
+    border-color: #333 !important;
+  }
+  
+  .thinking-header h2,
+  .title-text {
+    color: white !important;
+  }
+  
+  .thinking-phase,
+  .phase-card {
+    background: #2a2a2a !important;
+    border-color: #444 !important;
+    color: #ccc !important;
+  }
+  
+  /* Steps - Dark Theme */
+  .step-item {
+    background: #222 !important;
+    border-color: #333 !important;
+  }
+  
+  .step-title {
+    color: white !important;
+  }
+  
+  .step-details {
+    color: #999 !important;
+  }
+  
+  /* Task Summary - Dark Theme */
+  .task-summary-card {
+    background: linear-gradient(135deg, #1a3a1a 0%, #0d2a0d 100%) !important;
+    border-color: #2a4a2a !important;
+  }
+  
+  .task-summary-card h3,
+  .task-summary-card .stat-value,
+  .task-summary-card .stat-label {
+    color: white !important;
+  }
+  
+  /* Code Blocks - Already Dark */
+  .code-block-wrapper {
+    border-color: #333 !important;
+  }
+  
+  /* Scrollbar - Dark Theme */
+  ::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a !important;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #444 !important;
+    border-radius: 3px !important;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555 !important;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 380px) {
+  .welcome-screen h1 {
+    font-size: 24px !important;
+  }
+  
+  .mobile-credits {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+  }
+  
+  .input-box {
+    padding: 12px 16px !important;
+  }
+  
+  .input-actions button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+
+/* ============================================================================
+   MOBILE HEADER & INPUT - Manus.im Exact Match
+   ============================================================================ */
+
+/* Mobile Header */
+.mobile-header {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 56px !important;
+    background: #1a1a1a !important;
+    padding: 0 16px !important;
+    z-index: 1001 !important;
+  }
+  
+  .mobile-header-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+  }
+  
+  .mobile-header-title svg {
+    width: 14px !important;
+    height: 14px !important;
+    opacity: 0.7 !important;
+  }
+  
+  .mobile-credits {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: #2a2a2a !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+  
+  .mobile-credits svg {
+    width: 16px !important;
+    height: 16px !important;
+    color: #a78bfa !important;
+  }
+  
+  /* Hide desktop topbar on mobile */
+  .topbar {
+    display: none !important;
+  }
+  
+  /* Explore Button */
+  .explore-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: transparent !important;
+    border: 1px solid #444 !important;
+    color: #888 !important;
+    padding: 10px 18px !important;
+    border-radius: 24px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    margin-top: 16px !important;
+  }
+  
+  .explore-button svg {
+    width: 14px !important;
+    height: 14px !important;
+    opacity: 0.5 !important;
+  }
+  
+  /* Mobile Input Container */
+  .mobile-input-container {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-input-container {
+    display: block !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: #1a1a1a !important;
+    padding: 12px 16px !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    z-index: 1000 !important;
+  }
+  
+  .mobile-input-box {
+    background: #2a2a2a !important;
+    border-radius: 24px !important;
+    padding: 14px 20px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .mobile-input-box textarea {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: white !important;
+    font-size: 16px !important;
+    font-family: inherit !important;
+    resize: none !important;
+    min-height: 24px !important;
+    max-height: 120px !important;
+    line-height: 1.5 !important;
+  }
+  
+  .mobile-input-box textarea::placeholder {
+    color: #666 !important;
+  }
+  
+  .mobile-input-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 4px !important;
+  }
+  
+  .mobile-input-left,
+  .mobile-input-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  .mobile-action-btn {
+    width: 44px !important;
+    height: 44px !important;
+    background: #333 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #888 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .mobile-action-btn:hover,
+  .mobile-action-btn:active {
+    background: #444 !important;
+    color: white !important;
+  }
+  
+  .mobile-action-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .gmail-badge {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+    background: #333 !important;
+    padding: 10px 14px !important;
+    border-radius: 22px !important;
+    color: #888 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+  
+  .gmail-badge span:first-child {
+    color: #4285f4 !important;
+    font-weight: 600 !important;
+  }
+  
+  .mobile-send-btn {
+    width: 44px !important;
+    height: 44px !important;
+    background: #444 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #666 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .mobile-send-btn.active {
+    background: white !important;
+    color: #1a1a1a !important;
+  }
+  
+  .mobile-send-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Hide desktop input on mobile */
+  .input-wrapper,
+  .welcome-input,
+  .input-hint {
+    display: none !important;
+  }
+  
+  /* Adjust main content padding for mobile */
+  .main-content {
+    padding-bottom: 140px !important;
+  }
+  
+  /* Welcome screen adjustments */
+  .welcome-screen {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: calc(100vh - 200px) !important;
+    min-height: calc(100dvh - 200px) !important;
+    padding: 0 20px !important;
+  }
+  
+  .welcome-screen h2 {
+    color: white !important;
+    font-size: 26px !important;
+    font-weight: 400 !important;
+    margin-bottom: 0 !important;
+    text-align: center !important;
+  }
+}

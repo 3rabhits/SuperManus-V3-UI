@@ -260,6 +260,33 @@ const Icons = {
       <path d="M7 6H13M7 10H13M7 14H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
+  ChevronLeft: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  Plus: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  Brain: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2C6 2 3 5 3 9C3 13 6 16 10 16C14 16 17 13 17 9C17 5 14 2 10 2Z" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M7 7C7 7 8 8 10 8C12 8 13 7 13 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M10 8V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  ArrowUp: () => (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 16V4M10 4L5 9M10 4L15 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
 };
 
 // Sort options configuration
@@ -1237,15 +1264,27 @@ Would you like me to:
 
   return (
     <div className="app">
-      {/* Mobile Menu Button */}
-      <button 
-        className="mobile-menu-btn"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-      >
-        {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
-      </button>
+      {/* Mobile Header - Manus.im Style */}
+      <div className="mobile-header">
+        <button 
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <Icons.Close /> : <Icons.ChevronLeft />}
+        </button>
+        
+        <div className="mobile-header-title">
+          <span>Manus 1.6 Max</span>
+          <Icons.ChevronDown />
+        </div>
+        
+        <div className="mobile-credits">
+          <Icons.Sparkle />
+          <span>289,409</span>
+        </div>
+      </div>
 
-      {/* Mobile Files Button */}
+      {/* Mobile Files Button - Hidden */}
       <button 
         className="mobile-files-btn"
         onClick={() => setMobileFilesOpen(!mobileFilesOpen)}
@@ -1339,29 +1378,14 @@ Would you like me to:
             {messages.length === 0 && !currentTask ? (
               <div className="welcome-screen">
                 <h2>What can I do for you?</h2>
-                <div className="input-wrapper welcome-input">
-                  <textarea
-                    ref={inputRef}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="What can I do for you?"
-                    rows={1}
-                  />
-                  <div className="input-actions">
-                    <button className="input-btn" title="Add emoji"><Icons.Emoji /></button>
-                    <button className="input-btn" title="Voice input"><Icons.Mic /></button>
-                    <button 
-                      className={`send-btn ${inputValue.trim() ? 'active' : ''}`}
-                      onClick={handleSendMessage}
-                      disabled={!inputValue.trim()}
-                    >
-                      <Icons.Send />
-                    </button>
-                  </div>
-                </div>
-                <p className="input-hint">Press Enter to send, Shift+Enter for new line</p>
+                
+                {/* Explore Button - Manus.im Style */}
+                <button className="explore-button">
+                  <span>Explore what's in Manus Pro</span>
+                  <Icons.Close />
+                </button>
 
+                {/* Quick Actions - Desktop Only */}
                 <div className="quick-actions">
                   <button className="quick-action-btn" onClick={() => handleQuickAction('research')}>
                     <Icons.Globe />
@@ -1461,6 +1485,40 @@ Would you like me to:
             }}
           />
         )}
+
+        {/* Mobile Input Container - Manus.im Style */}
+        <div className="mobile-input-container">
+          <div className="mobile-input-box">
+            <textarea
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Assign a task or ask anything"
+              rows={1}
+            />
+          </div>
+          <div className="mobile-input-actions">
+            <div className="mobile-input-left">
+              <button className="mobile-action-btn"><Icons.Plus /></button>
+              <div className="gmail-badge">
+                <span>M</span>
+                <span>+1</span>
+              </div>
+            </div>
+            <div className="mobile-input-right">
+              <button className="mobile-action-btn"><Icons.Brain /></button>
+              <button className="mobile-action-btn"><Icons.Mic /></button>
+              <button 
+                className={`mobile-send-btn ${inputValue.trim() ? 'active' : ''}`}
+                onClick={handleSendMessage}
+                disabled={!inputValue.trim()}
+              >
+                <Icons.ArrowUp />
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
 
       {/* Right Panel */}
