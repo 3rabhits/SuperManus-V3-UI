@@ -6214,3 +6214,194 @@ textarea:focus-visible {
     text-align: center !important;
   }
 }
+
+
+/* ============================================================================
+   PROCESSING TASK IN SIDEBAR
+   ============================================================================ */
+
+.task-item.processing {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1)) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+  animation: processingPulse 2s ease-in-out infinite !important;
+}
+
+@keyframes processingPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+  }
+}
+
+.processing-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
+}
+
+.processing-icon .spinner {
+  width: 14px !important;
+  height: 14px !important;
+  border: 2px solid rgba(139, 92, 246, 0.3) !important;
+  border-top-color: #8b5cf6 !important;
+  border-radius: 50% !important;
+  animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.task-item.active {
+  background: rgba(139, 92, 246, 0.1) !important;
+  border-left: 3px solid #8b5cf6 !important;
+}
+
+.task-complete-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  background: #10b981 !important;
+  border-radius: 50% !important;
+  margin-right: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.task-complete-icon svg {
+  width: 10px !important;
+  height: 10px !important;
+  color: white !important;
+}
+
+/* ============================================================================
+   FLEXIBLE SCROLLING - Natural and Smooth
+   ============================================================================ */
+
+/* Messages area - natural scrolling */
+.messages-area {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Remove any scroll locks */
+.messages-area,
+.chat-container,
+.main-content {
+  overflow-anchor: none !important;
+}
+
+/* Ensure content doesn't lock scroll */
+.agent-response,
+.thinking-indicator-premium,
+.steps-timeline,
+.markdown-content {
+  overflow: visible !important;
+}
+
+/* Code blocks should scroll horizontally only */
+.code-block-wrapper {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-width: 100% !important;
+}
+
+.code-block-wrapper pre {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+/* Custom scrollbar for messages area */
+.messages-area::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.messages-area::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.messages-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 3px !important;
+}
+
+.messages-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Ensure smooth auto-scroll doesn't interfere with manual scroll */
+.messages-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  padding-bottom: 20px !important;
+}
+
+/* Welcome screen should be scrollable on small screens */
+.welcome-screen {
+  overflow-y: auto !important;
+  max-height: 100% !important;
+}
+
+/* Right panel scrolling */
+.panel-content {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Files list scrolling */
+.files-list {
+  overflow-y: auto !important;
+  max-height: calc(100vh - 200px) !important;
+}
+
+/* Mobile specific scrolling fixes */
+@media (max-width: 768px) {
+  .messages-area {
+    padding-bottom: 160px !important;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 56px) !important;
+    height: calc(100dvh - 56px) !important;
+    overflow: hidden !important;
+  }
+  
+  .messages-area {
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Prevent body scroll when modal is open */
+  body.modal-open {
+    overflow: hidden !important;
+  }
+}
+
+/* Smooth scroll behavior for all scrollable containers */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Disable smooth scroll for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}

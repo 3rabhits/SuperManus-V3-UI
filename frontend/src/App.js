@@ -1084,6 +1084,68 @@ function App() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  // Load saved state from localStorage on mount
+  useEffect(() => {
+    const savedTask = localStorage.getItem('currentTask');
+    const savedMessages = localStorage.getItem('messages');
+    const savedFiles = localStorage.getItem('files');
+    
+    if (savedTask) {
+      try {
+        const task = JSON.parse(savedTask);
+        // Only restore if task was in progress
+        if (task && (task.status === 'thinking' || task.status === 'processing')) {
+          setCurrentTask(task);
+        } else if (task) {
+          setCurrentTask(task);
+        }
+      } catch (e) {
+        console.error('Failed to restore task:', e);
+      }
+    }
+    
+    if (savedMessages) {
+      try {
+        setMessages(JSON.parse(savedMessages));
+      } catch (e) {
+        console.error('Failed to restore messages:', e);
+      }
+    }
+    
+    if (savedFiles) {
+      try {
+        const parsedFiles = JSON.parse(savedFiles);
+        // Convert date strings back to Date objects
+        const filesWithDates = parsedFiles.map(f => ({
+          ...f,
+          modified: new Date(f.modified)
+        }));
+        setFiles(filesWithDates);
+      } catch (e) {
+        console.error('Failed to restore files:', e);
+      }
+    }
+  }, []);
+
+  // Save state to localStorage when it changes
+  useEffect(() => {
+    if (currentTask) {
+      localStorage.setItem('currentTask', JSON.stringify(currentTask));
+    }
+  }, [currentTask]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('messages', JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (files.length > 0) {
+      localStorage.setItem('files', JSON.stringify(files));
+    }
+  }, [files]);
+
   // Sample files for demo
   const [files, setFiles] = useState([
     { name: 'index.html', size: 4520, modified: new Date() },
@@ -1096,8 +1158,32 @@ function App() {
     { name: 'favicon.svg', size: 1200, modified: new Date(Date.now() - 432000000) },
   ]);
 
+  // User scroll state to prevent auto-scroll when user is manually scrolling
+  const [userScrolled, setUserScrolled] = useState(false);
+  const scrollTimeoutRef = useRef(null);
+
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only auto-scroll if user hasn't manually scrolled up
+    if (!userScrolled) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [userScrolled]);
+
+  // Handle scroll events to detect manual scrolling
+  const handleScroll = useCallback((e) => {
+    const element = e.target;
+    const isAtBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 100;
+    
+    if (!isAtBottom) {
+      setUserScrolled(true);
+    } else {
+      setUserScrolled(false);
+    }
+    
+    // Reset user scrolled state after a delay when new content arrives
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
   }, []);
 
   useEffect(() => {
@@ -1333,10 +1419,29 @@ Would you like me to:
 
         <div className="sidebar-section">
           <h3 className="section-title">ALL TASKS</h3>
+          
+          {/* Current Processing Task */}
+          {currentTask && currentTask.status === 'thinking' && (
+            <button className="task-item processing">
+              <span className="processing-icon">
+                <span className="spinner"></span>
+              </span>
+              <span className="task-title">
+                {messages.length > 0 
+                  ? messages[messages.length - 1].content.substring(0, 25) + '...'
+                  : 'Processing...'
+                }
+              </span>
+            </button>
+          )}
+          
+          {/* Completed Tasks */}
           {messages.filter(m => m.type === 'user').slice(-5).map((msg, index) => (
-            <button key={index} className="task-item">
+            <button key={index} className={`task-item ${index === 0 && (!currentTask || currentTask.status !== 'thinking') ? 'active' : ''}`}>
+              {index === 0 && currentTask && currentTask.status === 'complete' && (
+                <span className="task-complete-icon"><Icons.Check /></span>
+              )}
               <span className="task-title">{msg.content.substring(0, 30)}...</span>
-              {index === 0 && <span className="task-active"></span>}
             </button>
           ))}
         </div>
@@ -1374,7 +1479,7 @@ Would you like me to:
 
         {/* Chat Area */}
         <div className="chat-container">
-          <div className="messages-area">
+          <div className="messages-area" onScroll={handleScroll}>
             {messages.length === 0 && !currentTask ? (
               <div className="welcome-screen">
                 <h2>What can I do for you?</h2>
