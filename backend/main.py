@@ -23,8 +23,11 @@ from openai import OpenAI
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
-# Initialize OpenAI client
-client = OpenAI(api_key=OPENAI_API_KEY)
+# Initialize OpenAI client with original API
+client = OpenAI(
+    api_key=OPENAI_API_KEY,
+    base_url="https://api.openai.com/v1"
+)
 
 # ============================================================================
 # FastAPI App
@@ -155,7 +158,7 @@ Always provide comprehensive and useful responses."""
     try:
         # Call OpenAI API
         response = client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model="gpt-4o-mini",
             messages=messages,
             max_tokens=4000,
             temperature=0.7

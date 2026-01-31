@@ -1097,6 +1097,31 @@ function App() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  // Handle starting a new task/conversation
+  const handleNewTask = useCallback(() => {
+    // Clear all state
+    setMessages([]);
+    setCurrentTask(null);
+    setExpandedSteps([]);
+    setSelectedFile(null);
+    setInputValue('');
+    setUserScrolled(false);
+    
+    // Clear localStorage
+    localStorage.removeItem('currentTask');
+    localStorage.removeItem('messages');
+    localStorage.removeItem('sessionId');
+    
+    // Close mobile menus if open
+    setMobileMenuOpen(false);
+    setMobileFilesOpen(false);
+    
+    // Focus on input
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  }, []);
+
   // Load saved state from localStorage on mount
   useEffect(() => {
     const savedTask = localStorage.getItem('currentTask');
@@ -1370,7 +1395,7 @@ function App() {
         </div>
 
         <div className="sidebar-actions">
-          <button className="sidebar-btn primary">
+          <button className="sidebar-btn primary" onClick={handleNewTask}>
             <Icons.NewTask />
             <span>New task</span>
           </button>
