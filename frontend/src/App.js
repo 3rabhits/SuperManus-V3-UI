@@ -1081,6 +1081,19 @@ function App() {
   const [currentStepIndex, setCurrentStepIndex] = useState(1);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFilesOpen, setMobileFilesOpen] = useState(false);
+  
+  // Sample files for demo - MUST be declared before useEffect that uses it
+  const [files, setFiles] = useState([
+    { name: 'index.html', size: 4520, modified: new Date() },
+    { name: 'styles.css', size: 2340, modified: new Date(Date.now() - 3600000) },
+    { name: 'app.js', size: 8900, modified: new Date(Date.now() - 7200000) },
+    { name: 'utils.js', size: 1200, modified: new Date(Date.now() - 86400000) },
+    { name: 'data.json', size: 15600, modified: new Date(Date.now() - 172800000) },
+    { name: 'README.md', size: 890, modified: new Date(Date.now() - 259200000) },
+    { name: 'logo.png', size: 45000, modified: new Date(Date.now() - 345600000) },
+    { name: 'favicon.svg', size: 1200, modified: new Date(Date.now() - 432000000) },
+  ]);
+  
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -1145,18 +1158,6 @@ function App() {
       localStorage.setItem('files', JSON.stringify(files));
     }
   }, [files]);
-
-  // Sample files for demo
-  const [files, setFiles] = useState([
-    { name: 'index.html', size: 4520, modified: new Date() },
-    { name: 'styles.css', size: 2340, modified: new Date(Date.now() - 3600000) },
-    { name: 'app.js', size: 8900, modified: new Date(Date.now() - 7200000) },
-    { name: 'utils.js', size: 1200, modified: new Date(Date.now() - 86400000) },
-    { name: 'data.json', size: 15600, modified: new Date(Date.now() - 172800000) },
-    { name: 'README.md', size: 890, modified: new Date(Date.now() - 259200000) },
-    { name: 'logo.png', size: 45000, modified: new Date(Date.now() - 345600000) },
-    { name: 'favicon.svg', size: 1200, modified: new Date(Date.now() - 432000000) },
-  ]);
 
   // User scroll state to prevent auto-scroll when user is manually scrolling
   const [userScrolled, setUserScrolled] = useState(false);
