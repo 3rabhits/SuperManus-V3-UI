@@ -1199,9 +1199,15 @@ function App() {
     );
   }, []);
 
-  const simulateAgentResponse = useCallback((userMessage) => {
+  // API Base URL - change this for production
+  const API_BASE_URL = 'https://8000-i51decah5uga692w0g4xv-6c75ad8c.sg1.manus.computer';
+
+  const sendToOpenAI = useCallback(async (userMessage) => {
     // Create task with thinking state
     const taskId = Date.now();
+    const sessionId = localStorage.getItem('sessionId') || `session_${Date.now()}`;
+    localStorage.setItem('sessionId', sessionId);
+
     setCurrentTask({
       id: taskId,
       status: 'thinking',
@@ -1210,7 +1216,7 @@ function App() {
       response: null,
     });
 
-    // Simulate thinking phases
+    // Animate thinking phases
     const phases = ['understanding', 'planning', 'executing', 'reviewing'];
     let phaseIndex = 0;
 
@@ -1222,96 +1228,61 @@ function App() {
           thinkingPhase: phases[phaseIndex],
         }));
       }
-    }, 1500);
+    }, 1000);
 
-    // Simulate steps
-    setTimeout(() => {
-      const steps = [
-        { id: 1, title: 'Analyzing task', action: 'analyze', status: 'completed', description: 'Understanding the requirements and planning the approach.' },
-        { id: 2, title: 'Executing task', action: 'execute', status: 'completed', description: 'Running the necessary operations.', details: "{'observation': '55\\n', 'success': True}" },
-      ];
-      
+    // Add analyzing step
+    setCurrentTask(prev => ({
+      ...prev,
+      steps: [{ id: 1, title: 'Analyzing task', action: 'analyze', status: 'running', description: 'Understanding your request...' }],
+    }));
+
+    try {
+      // Call the backend API
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          session_id: sessionId,
+        }),
+      });
+
+      clearInterval(phaseInterval);
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Update task with response
       setCurrentTask(prev => ({
         ...prev,
-        steps: steps,
+        status: 'complete',
+        response: data.response,
+        thinkingPhase: null,
+        steps: [
+          { id: 1, title: 'Analyzing task', action: 'analyze', status: 'completed', description: 'Understanding your request' },
+          { id: 2, title: 'Generating response', action: 'execute', status: 'completed', description: 'Creating comprehensive answer' },
+        ],
       }));
-    }, 2000);
 
-    // Complete the task
-    setTimeout(() => {
+    } catch (error) {
       clearInterval(phaseInterval);
-      
-      const response = `## Task Completed Successfully! 🎉
-
-I've created a Python function to calculate Fibonacci numbers with comprehensive documentation.
-
-### Function Overview
-
-The \`fibonacci(n)\` function calculates the n-th Fibonacci number using an iterative approach for optimal performance.
-
-\`\`\`python
-def fibonacci(n):
-    """
-    Calculate the n-th Fibonacci number.
-    
-    Args:
-        n (int): The position in the Fibonacci sequence (0-indexed)
-        
-    Returns:
-        int: The n-th Fibonacci number
-        
-    Raises:
-        ValueError: If n is negative
-        
-    Example:
-        >>> fibonacci(10)
-        55
-    """
-    if n < 0:
-        raise ValueError("n must be non-negative")
-    if n <= 1:
-        return n
-    
-    a, b = 0, 1
-    for _ in range(2, n + 1):
-        a, b = b, a + b
-    return b
-\`\`\`
-
-### Features
-
-- **Efficient**: Uses O(n) time complexity
-- **Memory-safe**: O(1) space complexity
-- **Well-documented**: Includes docstring with examples
-- **Error handling**: Validates input parameters
-
-### Usage Example
-
-\`\`\`python
-# Calculate the 10th Fibonacci number
-result = fibonacci(10)
-print(f"The 10th Fibonacci number is: {result}")
-# Output: The 10th Fibonacci number is: 55
-\`\`\`
-
-Would you like me to:
-- Save this to a file?
-- Add more features?
-- Create unit tests?`;
+      console.error('API Error:', error);
 
       setCurrentTask(prev => ({
         ...prev,
         status: 'complete',
-        response: response,
+        response: `## ❌ Error\n\nFailed to connect to the AI backend.\n\n**Error:** ${error.message}\n\n**Possible solutions:**\n1. Make sure the backend server is running on port 8000\n2. Run: \`cd backend && python main.py\`\n3. Check your internet connection`,
         thinkingPhase: null,
+        steps: [
+          { id: 1, title: 'Connection failed', action: 'error', status: 'failed', description: error.message },
+        ],
       }));
-
-      // Add new files
-      setFiles(prev => [
-        { name: 'fibonacci.py', size: 1250, modified: new Date() },
-        ...prev,
-      ]);
-    }, 6000);
+    }
   }, []);
 
   const handleSendMessage = useCallback(() => {
@@ -1328,8 +1299,8 @@ Would you like me to:
     setInputValue('');
     setExpandedSteps([]);
     
-    simulateAgentResponse(inputValue);
-  }, [inputValue, simulateAgentResponse]);
+    sendToOpenAI(inputValue);
+  }, [inputValue, sendToOpenAI]);
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
